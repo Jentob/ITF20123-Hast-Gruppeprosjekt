@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
 
 namespace HIOF.Hast.HARB.Framework
 {
     public class Harbor
     {
         public List<Ship> Ships { get;} = new List<Ship>();
-        public List<Container> Containers { get;} = new List<Container>();
 
         public void ConfigureHarbor()
         {
@@ -29,6 +29,12 @@ namespace HIOF.Hast.HARB.Framework
 
                 Ship ship = new Ship(shipName, shipSize);
                 Ships.Add(ship);
+
+                // Legge til cargo
+
+                // Mulighet for å sette op gjenntagende seilinger
+
+
 
                 Console.WriteLine($"Skipet {ship} er lagt til i havnen.");
             }
