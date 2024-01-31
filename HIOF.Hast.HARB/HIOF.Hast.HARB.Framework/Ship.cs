@@ -25,13 +25,38 @@ namespace HIOF.Hast.HARB.Framework
 		public int Id { get; } = count++;
 		public string Name { get; set; } = name;
 		public ShipSize Size { get; set; } = size;
-		public List<LogEntry> History { get; } = [];
-		public List<ICargo> Cargohold { get; } = [];
+        public List<LogEntry> History { get; } = new List<LogEntry>();
+        public List<ICargo> Cargohold { get; } = new List<ICargo>();
 
-		public override string? ToString()
-		{
-			return base.ToString();
-		}
+        public override string? ToString()
+        {
+            return base.ToString();
+        }
+
+
+        public void AddCargo(ICargo cargo)
+        {
+            Cargohold.Add(cargo);
+            Console.WriteLine($"Container '{cargo.Name}' er lastet på skipet {Name}.");
+        }
+
+
+        public void PrintCargohold()
+        {
+            if (Cargohold.Any())
+            {
+                Console.WriteLine($"Liste over containere for {Name}:");
+                foreach (ICargo cargo in Cargohold)
+                {
+                    Console.WriteLine($"{cargo.Name} - Vekt: {cargo.WeightInKG} kg");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Ingen containerer på skipet {Name}.");
+            }
+        }
+
 
 		public void PrintHistory()
 		{
