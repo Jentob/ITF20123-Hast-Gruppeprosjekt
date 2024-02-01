@@ -11,5 +11,7 @@ namespace HIOF.Hast.HARB.Framework
         public int Id { get; }
         public string Name { get; }
         public int WeightInKG { get; }
-    }
+        public List<LogEntry> History { get; }
+		public void RecordHistory(LogEntry entry);
+	}
 }
