@@ -38,6 +38,7 @@ namespace HIOF.Hast.HARB.Framework
         {
             Cargohold.Add(cargo);
             Console.WriteLine($"Container '{cargo.Name}' er lastet på skipet {Name}.");
+            // legg til i loggen
         }
 
 
@@ -45,7 +46,7 @@ namespace HIOF.Hast.HARB.Framework
         {
             if (Cargohold.Any())
             {
-                Console.WriteLine($"Liste over containere for {Name}:");
+                Console.WriteLine($"Liste over containere for skipet {Name}:");
                 foreach (ICargo cargo in Cargohold)
                 {
                     Console.WriteLine($"{cargo.Name} - Vekt: {cargo.WeightInKG} kg");

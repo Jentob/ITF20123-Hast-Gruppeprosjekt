@@ -6,8 +6,18 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
     {
         static void Main(string[] args)
         {
-            ISimulationDriver driver = new DriverImplementation();
-            driver.Run();
+            Harbor harbor = new Harbor();
+            harbor.ConfigureHarbor();
+
+            Console.WriteLine("Simulasjon av havn startet. . .");
+
+            /*ISimulationDriver driver = new DriverImplementation();
+            driver.Run();*/
+
+            Console.WriteLine("Simulasjon er ferdig. Skriv inn ID på skip for å se historikk:");
+
+            String shipID = Console.ReadLine();
+          
         }
     }
 }
