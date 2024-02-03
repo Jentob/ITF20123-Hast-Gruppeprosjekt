@@ -40,8 +40,17 @@ namespace HIOF.Hast.HARB.Framework
 		public List<LogEntry> History { get; } = [];
 		public List<ICargo> Cargohold { get; } = [];
 		public int MaxCargoWeightInKG { get; set; } = maxCarryWeightInKG;
+        public List<SailingSchedule> SailingSchedules { get; } = new List<SailingSchedule>();
 
-		public override string? ToString()
+
+
+        public void AddToSailingSchedule(DateTime departureTime, TimeSpan interval)
+        {
+            SailingSchedules.Add(new SailingSchedule(departureTime, interval));
+        }
+
+
+        public override string? ToString()
 		{
 			return base.ToString();
 		}

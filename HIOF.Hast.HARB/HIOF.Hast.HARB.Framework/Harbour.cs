@@ -1,76 +1,82 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Schema;
 
 namespace HIOF.Hast.HARB.Framework
 {
+    /// <summary>
+    /// Class representing a harbour simulator.
+    /// </summary>
     public class Harbour
     {
+        /// <summary>
+        /// Gets the queue of ships waiting to enter the harbour.
+        /// </summary>
         public Queue<Ship> WaitingQueue { get; } = new Queue<Ship>();
+        /// <summary>
+        /// Gets the list of ports in the harbour.
+        /// </summary>
         public List<Port> Port { get; } = new List<Port> { };
+      
 
         /// <summary>
-        /// Metode for å konfigurere havnen. 
+        /// Method to configure the harbour.
         /// </summary>
+        /// 
         public void ConfigureHarbour()
         {
-            Console.WriteLine("Velkommen til vår havn simulator");
+            Console.WriteLine("Welcome to our harbor simulator");
 
-            // Håndter antall skip
+            // Handle the number of ships
             int numberOfShips = GetNumberOfShips();
 
-            // Opprett skip basert på brukerinput
+            // Create ships based on user input
             for (int i = 0; i < numberOfShips; i++)
             {
                 Ship ship = CreateShip(i + 1);
                 WaitingQueue.Enqueue(ship);
 
-                Console.WriteLine($"Skipet {ship.Name} er lagt til i havnen.");
+                Console.WriteLine($"The ship {ship.Name} has been added to the harbour.");
             }
+
         }
 
         /// <summary>
-        /// Metode for å sette antall skip som skal legges til havn 
+        /// Method to set the number of ships to be added to the harbour.
         /// </summary>
         private int GetNumberOfShips()
         {
-            Console.Write("Skriv inn antall skip du ønsker å legge til for simulering: ");
+            Console.Write("Enter the number of ships you want to add for simulation: ");
             int numberOfShips;
 
             while (!int.TryParse(Console.ReadLine(), out numberOfShips) || numberOfShips <= 0)
             {
-                Console.Write("Ugyldig tall, skriv inn et positivt heltall: ");
+                Console.Write("Invalid number, please enter a positive integer: ");
             }
 
             return numberOfShips;
         }
 
         /// <summary>
-        /// Metode for å opprette skip til havnen: navn, størrelse og om det ønskes gjentagende seilinger
+        /// Method to create a ship for the harbour: name, size, and whether recurring sailings are desired.
         /// </summary>
         private Ship CreateShip(int index)
         {
-            Console.Write($"Skriv inn navnet på skip {index}: ");
+            Console.Write($"Enter the name of ship {index}: ");
             string shipName = Console.ReadLine();
 
-            Console.Write($"Velg størrelsen på skipet (Small/Medium/Large) for {shipName}: ");
+            Console.Write($"Choose the size of the ship (Small/Medium/Large) for {shipName}: ");
             ShipSize shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
 
-            Console.Write($"Ønsker du gjentagende seilinger for {shipName}? (Ja/Nei): ");
-            bool hasRecurringSailings = Console.ReadLine().Trim().Equals("Ja", StringComparison.OrdinalIgnoreCase);
+            Console.Write($"Do you want recurring sailings for {shipName}? (Yes/No): ");
+            bool hasRecurringSailings = Console.ReadLine().Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase);
 
             Ship ship = new Ship(shipName, shipSize);
 
-            // Legg til logikk for gjentagende seilinger
+            // TODO: Add logic for recurring sailings
             if (hasRecurringSailings)
             {
-
+              
             }
-
             return ship;
         }
     }

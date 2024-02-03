@@ -7,7 +7,11 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
         static void Main(string[] args)
         {
             Harbour harbour = new Harbour();
+
+            // Creating Harbour
             harbour.ConfigureHarbour();
+
+            harbour.GetNumberOfShips();
 
             Console.WriteLine("Simulasjon av havn startet. . .");
 
