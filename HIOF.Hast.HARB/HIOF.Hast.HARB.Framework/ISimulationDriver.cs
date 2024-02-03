@@ -8,10 +8,6 @@ namespace HIOF.Hast.HARB.Framework
 {
     public interface ISimulationDriver
     {
-        /// <param name="time"> Ventetiden på venteplass.</param>
-
-        public int Run(int time);
-
-        public void Step();
+        public void Run(Harbor harbor, int time);
     }
 }
