@@ -12,6 +12,9 @@ namespace HIOF.Hast.HARB.Framework
 
         public int Run(int time);
 
+        /// <summary>
+        /// Stop simulation
+        /// </summary>
         public void Step();
     }
 }
