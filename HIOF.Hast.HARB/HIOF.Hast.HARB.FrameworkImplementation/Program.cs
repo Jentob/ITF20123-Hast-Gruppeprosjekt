@@ -6,8 +6,8 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
     {
         static void Main(string[] args)
         {
-            Harbor harbor = new Harbor();
-            harbor.ConfigureHarbor();
+            Harbour harbour = new Harbour();
+            harbour.ConfigureHarbour();
 
             Console.WriteLine("Simulasjon av havn startet. . .");
 
@@ -16,8 +16,9 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             Console.WriteLine("Simulasjon er ferdig. Skriv inn ID på skip for å se historikk:");
 
-            String shipID = Console.ReadLine();
-          
+            // implementer 
+
+
         }
     }
 }
