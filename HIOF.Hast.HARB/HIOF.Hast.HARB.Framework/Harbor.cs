@@ -10,45 +10,68 @@ namespace HIOF.Hast.HARB.Framework
 {
     public class Harbor
     {
-        public List<Ship> Ships { get;} = new List<Ship>();
+        public Queue<Ship> WaitingQueue { get; } = new Queue<Ship>();
+        public List<Port> Port { get; } = new List<Port> { };
 
         /// <summary>
         /// Metode for å konfigurere havnen. 
         /// </summary>
-        public void ConfigureHarbor()
+        public void ConfigureHarbour()
         {
             Console.WriteLine("Velkommen til vår havn simulator");
 
-            Console.Write("Skriv in antall skip du ønsker å legge til i simuleringen:");
+            // Håndter antall skip
+            int numberOfShips = GetNumberOfShips();
+
+            // Opprett skip basert på brukerinput
+            for (int i = 0; i < numberOfShips; i++)
+            {
+                Ship ship = CreateShip(i + 1);
+                WaitingQueue.Enqueue(ship);
+
+                Console.WriteLine($"Skipet {ship.Name} er lagt til i havnen.");
+            }
+        }
+
+        /// <summary>
+        /// Metode for å sette antall skip som skal legges til havn 
+        /// </summary>
+        private int GetNumberOfShips()
+        {
+            Console.Write("Skriv inn antall skip du ønsker å legge til for simulering: ");
             int numberOfShips;
 
-           
-            // Valider brukeren sin input
             while (!int.TryParse(Console.ReadLine(), out numberOfShips) || numberOfShips <= 0)
             {
                 Console.Write("Ugyldig tall, skriv inn et positivt heltall: ");
             }
 
-            // Navn og størrelse på skipene
-            for (int i = 0; i < numberOfShips; i++)
+            return numberOfShips;
+        }
+
+        /// <summary>
+        /// Metode for å opprette skip til havnen: navn, størrelse og om det ønskes gjentagende seilinger
+        /// </summary>
+        private Ship CreateShip(int index)
+        {
+            Console.Write($"Skriv inn navnet på skip {index}: ");
+            string shipName = Console.ReadLine();
+
+            Console.Write($"Velg størrelsen på skipet (Small/Medium/Large) for {shipName}: ");
+            ShipSize shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
+
+            Console.Write($"Ønsker du gjentagende seilinger for {shipName}? (Ja/Nei): ");
+            bool hasRecurringSailings = Console.ReadLine().Trim().Equals("Ja", StringComparison.OrdinalIgnoreCase);
+
+            Ship ship = new Ship(shipName, shipSize);
+
+            // Legg til logikk for gjentagende seilinger
+            if (hasRecurringSailings)
             {
-                Console.Write($"Skriv inn navnet på skip {i + 1}: ");
-                string shipName = Console.ReadLine();
 
-                Console.Write($"Velg størrelsen på skipet (Small/Medium/Large) for {shipName}: ");
-                ShipSize shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
-
-                Console.Write($"Ønsker du gjentagende seilinger for {shipName}? ");
-                // Mulighet for å sette opp gjenntagende seilinger
-
-                Ship ship = new Ship(shipName, shipSize);
-                Ships.Add(ship);
-
-                // Legge til cargo
-
-
-                Console.WriteLine($"Skipet {ship} er lagt til i havnen.");
             }
+
+            return ship;
         }
     }
 }

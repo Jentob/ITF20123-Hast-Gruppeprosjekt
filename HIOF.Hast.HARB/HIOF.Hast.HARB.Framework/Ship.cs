@@ -7,18 +7,30 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
+	/// <summary>
+	/// A enum class for storing ship sizes.
+	/// </summary>
 	public enum ShipSize
 	{
 		Small,
 		Medium,
 		Large,
 	}
+	/// <summary>
+	/// A structure class for logging ships.
+	/// </summary>
 	public struct LogEntry
 	{
 		public DateTime date;
 		public string message;
 	}
 
+	/// <summary>
+	/// A ship constructor for registering ship objects.
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="size"></param>
+	/// <param name="maxCarryWeightInKG"></param>
 	public class Ship(string name, ShipSize size, int maxCarryWeightInKG)
 	{
 		private static int count = 0;
@@ -73,6 +85,11 @@ namespace HIOF.Hast.HARB.Framework
 			return true;
 		}
 
+		/// <summary>
+		/// Remove cargo from the ship object.
+		/// </summary>
+		/// <param name="cargo"></param>
+		/// <returns>Returns the cargo interface. </returns>
 		public ICargo? RemoveCargo(ICargo cargo)
 		{
 			if (!Cargohold.Contains(cargo)) return null;
@@ -89,6 +106,9 @@ namespace HIOF.Hast.HARB.Framework
 		}
 
 
+		/// <summary>
+		/// A method for printing Cargohold
+		/// </summary>
 		public void PrintCargohold()
 		{
 			if (Cargohold.Count != 0)
@@ -106,6 +126,9 @@ namespace HIOF.Hast.HARB.Framework
 		}
 
 
+		/// <summary>
+		/// A method for printing cargo history
+		/// </summary>
 		public void PrintHistory()
 		{
 			foreach (LogEntry entry in History) { Console.WriteLine($"{entry.date} - {entry.message}"); }

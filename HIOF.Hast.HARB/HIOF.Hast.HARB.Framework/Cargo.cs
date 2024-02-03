@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
+	/// <summary>
+	/// A abstract class for registering Cargo objects, that implements the ICargo interface.
+	/// </summary>
+	/// <param name="name"></param>
+	/// <param name="weight"></param>
+	/// <param name="description"></param>
 	internal abstract class Cargo(string name, int weight, string description) : ICargo
     {
 		private static int count;
