@@ -8,6 +8,6 @@ namespace HIOF.Hast.HARB.Framework
 {
     public interface ISimulationDriver
     {
-        public void Run(Harbor harbor, int time);
+        public void Run(Harbour harbor, int time);
     }
 }
