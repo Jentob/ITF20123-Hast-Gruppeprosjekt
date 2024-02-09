@@ -13,7 +13,7 @@ namespace HIOF.Hast.HARB.Framework
 		/// The program start from current date/time
 		/// </summary>
 		/// <param name="daysToRun">The amount of days you wish to simulate</param>
-		public void Run(Harbour harbor, int daysToRun)
+		public void Run(Harbor harbor, int daysToRun)
         {
             DateTime time = DateTime.Now;
             while (time < time.AddDays(daysToRun))
@@ -23,7 +23,7 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
-		private void Update(Harbour harbor, DateTime time)
+		private void Update(Harbor harbor, DateTime time)
 		{
 			foreach (Ship ship in harbor.Ships)
 			{

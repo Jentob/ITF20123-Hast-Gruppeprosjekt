@@ -6,12 +6,12 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
     {
         static void Main(string[] args)
         {
-            Harbour harbour = new Harbour();
+            Harbor harbor = new Harbor();
 
-            // Creating Harbour
-            harbour.ConfigureHarbour();
+            // Creating Harbor
+            harbor.ConfigureHarbor();
 
-            harbour.GetNumberOfShips();
+            harbor.GetNumberOfShips();
 
             Console.WriteLine("Simulasjon av havn startet. . .");
 
