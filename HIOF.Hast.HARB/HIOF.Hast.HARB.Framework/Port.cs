@@ -11,34 +11,75 @@
         public ShipSize Size { get; } = size;
         public Ship? OccupyingShip { get; private set; }
 
-        public bool OccupyPort(Ship ship, DateTime? time = null)
+        private bool CanShipDock(Ship ship)
         {
-            if (OccupyingShip == null && ship != null && ship.Size <= Size) {
-                if(time != null) ship.RecordHistory(new(time, $"Docked at {Name}({Id})"));
+            if(OccupyingShip == null && ship.Size <= Size)
+                return true;
+            return false;
+        }
+
+        public bool OccupyPort(Ship ship)
+        {
+            if (CanShipDock(ship))
+            {
                 OccupyingShip = ship;
                 return true;
             }
             return false;
         }
 
-        public Ship? LeavePort(DateTime? time = null)
+		public bool OccupyPort(Ship ship, DateTime time)
+        {
+			if (CanShipDock(ship))
+			{
+				ship.RecordHistory(new(time, $"Docked at {Name}({Id})"));
+				OccupyingShip = ship;
+				return true;
+			}
+			return false;
+		}
+
+		public Ship? LeavePort()
+		{
+			if (OccupyingShip != null)
+			{
+				Ship? shipToLeave = OccupyingShip;
+				OccupyingShip = null;
+				return shipToLeave;
+			}
+			return null;
+		}
+
+		public Ship? LeavePort(DateTime time)
         {
             if (OccupyingShip != null) {
                 Ship? shipToLeave = OccupyingShip;
                 OccupyingShip = null; 
-                if(time != null) shipToLeave.RecordHistory(new(time, $"Undocked at {Name}({Id})"));
+                shipToLeave.RecordHistory(new(time, $"Undocked at {Name}({Id})"));
                 return shipToLeave;
             }
             return null;
         }
 
-        public bool AddCargo(Cargo cargo, DateTime? time = null)
+		public bool AddCargo(Cargo cargo)
+		{
+			if (OccupyingShip != null && OccupyingShip.AddCargo(cargo)) return true;
+			return false;
+		}
+
+		public bool AddCargo(Cargo cargo, DateTime time)
         {
             if (OccupyingShip != null && OccupyingShip.AddCargo(cargo, time)) return true;
             return false;
         }
 
-        public bool RemoveCargo(Cargo cargo, DateTime? time = null)
+		public bool RemoveCargo(Cargo cargo)
+		{
+			if (OccupyingShip != null && OccupyingShip.RemoveCargo(cargo)) return true;
+			return false;
+		}
+
+		public bool RemoveCargo(Cargo cargo, DateTime time)
 		{
 			if (OccupyingShip != null && OccupyingShip.RemoveCargo(cargo, time)) return true;
             return false;

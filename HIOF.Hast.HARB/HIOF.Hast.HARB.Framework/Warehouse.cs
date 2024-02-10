@@ -21,15 +21,25 @@ namespace HIOF.Hast.HARB.Framework
         }
         public HashSet<Cargo> Inventory { get; } = [];
 
-        internal bool AddCargo(Cargo cargo, DateTime? time = null)
+		internal bool AddCargo(Cargo cargo)
+		{
+			return Inventory.Add(cargo);
+		}
+
+		internal bool AddCargo(Cargo cargo, DateTime time)
         {
-            if(time != null) cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
+            cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
             return Inventory.Add(cargo);
         }
 
-        internal bool RemoveCargo(Cargo cargo, DateTime? time = null)
+		internal bool RemoveCargo(Cargo cargo)
+		{
+			return Inventory.Remove(cargo);
+		}
+
+		internal bool RemoveCargo(Cargo cargo, DateTime time)
         {
-            if(time != null) cargo.RecordHistory(new(time, $"Removed from warehouse {Name}({Id})"));
+            cargo.RecordHistory(new(time, $"Removed from warehouse {Name}({Id})"));
             return Inventory.Remove(cargo);
         }
 

@@ -8,22 +8,11 @@
 		Large,
 	}
 	/// <summary>LogEntry keeps time and event separated.</summary>
-	public struct LogEntry
+	public struct LogEntry(DateTime _time, string _message)
 	{
-		public DateTime time;
-		public string message;
-
-		public LogEntry(DateTime time, string message) : this()
-		{
-			this.time = time;
-			this.message = message;
-		}
-		internal LogEntry(DateTime? time, string message) : this()
-		{
-			if (time != null) this.time = (DateTime)time;
-			else this.time = DateTime.MinValue;
-			this.message = message;
-		}
+		public DateTime time = _time;
+		public string message = _message;
+		
         public override readonly string ToString()
         {
             return $"{time} - {message}";
@@ -52,24 +41,37 @@
             SailingSchedules.Add(new SailingSchedule(departureTime, interval));
         }
 
-		/// <summary>Adds cargo to the cargohold</summary>
-		/// <param name="cargo">The cargo to be loaded onboard the ship</param>
-		internal bool AddCargo(Cargo cargo, DateTime? time = null)
+		private bool CargoCheck(Cargo cargo)
 		{
 			double weight = cargo.WeightInKG;
 			foreach (var item in Cargohold)
 				weight += item.WeightInKG;
-			if (weight > MaxCargoWeightInKG)
+			if (weight < MaxCargoWeightInKG)
+				return true;
+			return false;
+		}
+
+		/// <summary>Adds cargo to the cargohold</summary>
+		/// <param name="cargo">The cargo to be loaded onboard the ship</param>
+		internal bool AddCargo(Cargo cargo)
+		{
+			if(!CargoCheck(cargo))
 				return false;
-			
-			if(time != null)
-			{
-				cargo.RecordHistory(new(time, $"Added to ship {Name}({Id})"));
-				RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
-			}
 
 			Cargohold.Add(cargo);
 
+			return true;
+		}
+
+		internal bool AddCargo(Cargo cargo, DateTime time)
+		{
+			if (!CargoCheck(cargo))
+				return false;
+
+			cargo.RecordHistory(new(time, $"Added to ship {Name}({Id})"));
+			RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
+		
+			Cargohold.Add(cargo);
 
 			return true;
 		}
@@ -77,15 +79,22 @@
 		/// <summary>Remove cargo from the ship object.</summary>
 		/// <param name="cargo"></param>
 		/// <returns>Returns the cargo interface.</returns>
-		internal bool RemoveCargo(Cargo cargo, DateTime? time = null)
+		internal bool RemoveCargo(Cargo cargo)
 		{
 			if (!Cargohold.Contains(cargo)) return false;
 			Cargohold.Remove(cargo);
-			if(time != null)
-			{
-				RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
-				cargo.RecordHistory(new(time, $"Removed from ship {Name}({Id})"));
-			}
+			
+			return true;
+		}
+
+		internal bool RemoveCargo(Cargo cargo, DateTime time)
+		{
+			if (!Cargohold.Contains(cargo)) return false;
+			Cargohold.Remove(cargo);
+						
+			RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
+			cargo.RecordHistory(new(time, $"Removed from ship {Name}({Id})"));
+			
 			return true;
 		}
 
