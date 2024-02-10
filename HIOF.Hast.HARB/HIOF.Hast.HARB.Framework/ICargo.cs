@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
-    /// <summary>
-    /// A interface that stores information for cargo
-    /// </summary>
+    /// <summary>Represents cargo.</summary>
     public interface ICargo
     {
         public int Id { get; }
         public string Name { get; }
-        public int WeightInKG { get; }
-        public List<LogEntry> History { get; }
+        public double WeightInKG { get; }
+        public List<LogEntry> Log { get; }
 		public void RecordHistory(LogEntry entry);
 	}
 }

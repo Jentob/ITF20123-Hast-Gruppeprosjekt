@@ -6,25 +6,19 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
-	/// <summary>
-	/// A abstract class for registering Cargo objects, that implements the ICargo interface.
-	/// </summary>
-	/// <param name="name"></param>
-	/// <param name="weight"></param>
-	/// <param name="description"></param>
-	internal abstract class Cargo(string name, int weight, string description) : ICargo
+	/// <summary>Represents cargo. Implements the ICargo interface.</summary>
+	/// <param name="name">Name of cargo</param>
+	/// <param name="weight">Weight in kilos</param>
+	public class Cargo(string name, int weight) : ICargo
     {
-		private static int count;
-		public int Id { get; } = count++;
+		private static int idCount = 0;
+		public int Id { get; } = idCount++;
 		public string Name { get; set; } = name;
-		public int WeightInKG { get; set; } = weight;
-		public string Description { get; set; } = description;
-		public List<LogEntry> History { get; } = [];
+		public double WeightInKG { get; } = weight;
+		public List<LogEntry> Log { get; } = [];
 
-		public void RecordHistory(LogEntry entry)
-		{
-			History.Add(entry);
-		}
+        public void RecordHistory(LogEntry entry) => Log.Add(entry);
 
-	}
+        public override string ToString() => $"Cargo - {Name}({Id}) - {WeightInKG}";
+    }
 }
