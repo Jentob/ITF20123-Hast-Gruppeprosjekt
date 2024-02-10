@@ -94,32 +94,42 @@
         }
 
         /// <summary>Used by ConfigureHarbor() to create ships.</summary>
-        private Ship? CliCreateShip(int index)
+        private static Ship? CliCreateShip(int index)
         {
 			Console.Write($"Enter the name of ship {index}: ");
 			string? shipName = Console.ReadLine();
 
 			Console.Write($"Choose the size of the ship (Small/Medium/Large) for {shipName}: ");
-			ShipSize? shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
-			double maxCarryWeight = 0;
-			switch (shipSize)
-			{
-				case ShipSize.Small:
-					maxCarryWeight = 100;
-					break;
-				case ShipSize.Medium:
-					maxCarryWeight = 500;
-					break;
-				case ShipSize.Large:
-					maxCarryWeight = 100;
-					break;
-				default:
-					Console.WriteLine("");
-					break;
-			}
+            ShipSize? shipSize = null;
+            double maxCarryWeight;
+            while (true)
+            {
+                try
+                {
+                    string? tmp = Console.ReadLine();
+                    if (tmp != null)
+                    shipSize = Enum.Parse<ShipSize>(tmp, true);
+
+                    maxCarryWeight = shipSize switch
+                    {
+                        ShipSize.Small => 2,
+                        ShipSize.Medium => 40,
+                        ShipSize.Large => 500,
+                        _ => throw new Exception(),
+                    };
+                    break;
+            }
+                catch (Exception)
+                {
+                    continue;
+                }
+            }
 
 			Console.Write($"Do you want recurring sailings for {shipName}? (Yes/No): ");
-			bool? hasRecurringSailings = Console.ReadLine().Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase);
+            string? tmp2 = Console.ReadLine();
+            bool? hasRecurringSailings = null;
+            if (tmp2 != null)
+			    hasRecurringSailings = tmp2.Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase);
 
 			if (shipName == null || shipSize == null || hasRecurringSailings == null)
 			{
