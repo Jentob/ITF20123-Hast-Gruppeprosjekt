@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace HIOF.Hast.HARB.Framework
+﻿namespace HIOF.Hast.HARB.Framework
 {
     /// <summary>Represents a port for ships to dock to Can be used to load/unload cargo.</summary>
     /// <param name="name">Name of port.</param> 

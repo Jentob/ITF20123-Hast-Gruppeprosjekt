@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HIOF.Hast.HARB.Framework
+﻿namespace HIOF.Hast.HARB.Framework
 {
 	/// <summary>Represents cargo. Implements the ICargo interface.</summary>
 	/// <param name="name">Name of cargo</param>
