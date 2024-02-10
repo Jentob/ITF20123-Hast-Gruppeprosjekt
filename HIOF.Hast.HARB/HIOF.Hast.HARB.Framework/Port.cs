@@ -87,8 +87,8 @@
 
         public override string ToString()
         {
-            if (OccupyingShip != null) return $"Port - {Name}({Id}) - Occupied by {OccupyingShip})";
-            else return $"Port - {Name}({Id}) - Not currently Occupied";
+            if (OccupyingShip != null) return $"Port - {Name}({Id}) - Occupied by {OccupyingShip}";
+            else return $"Port - {Name}({Id}) - Not currently occupied";
         }
     }
 }

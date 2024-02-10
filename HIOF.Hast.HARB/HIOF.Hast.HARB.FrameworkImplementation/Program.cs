@@ -6,17 +6,32 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
     {
         static void Main(string[] args)
         {
-            Harbor harbor = new();
+            Harbor harbor = new("Harbor 1");
 
             DateTime start = DateTime.Parse("2024-01-01");
-            DateTime end = DateTime.Parse("2024-04-01");
+            DateTime end = DateTime.Parse("2024-02-01");
 
-            // TODO: Her setter vi opp havnen
+            harbor.AddWarehouse(new("Warehouse 1", 10));
+			harbor.AddWarehouse(new("Warehouse 2", 5));
 
-            Driver.Run(harbor, start, end);
+			harbor.AddPort(new("Medium Port 1", ShipSize.Medium));
+			harbor.AddPort(new("Large Port 1", ShipSize.Large));
 
-            // TODO: Her kan vi hente ut data
-            
-        }
-    }
+			harbor.AddShip(new("Apple", ShipSize.Small, 2));
+			harbor.AddShip(new("Butter", ShipSize.Medium, 8));
+			harbor.AddShip(new("Charlie", ShipSize.Large, 20));
+            harbor.DockShips();
+
+
+			Driver.Run(harbor, start, end);
+
+
+            Console.WriteLine(String.Join("\n", harbor.Ports));
+			Console.WriteLine();
+			Console.WriteLine("Ships in queue:");
+			Console.WriteLine(String.Join("\n", harbor.WaitingQueue));
+
+
+		}
+	}
 }

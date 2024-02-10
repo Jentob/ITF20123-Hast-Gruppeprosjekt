@@ -23,13 +23,19 @@ namespace HIOF.Hast.HARB.Framework
 
 		internal bool AddCargo(Cargo cargo)
 		{
-			return Inventory.Add(cargo);
+            if (Inventory.Count < MaxCapacity)
+			    return Inventory.Add(cargo);
+            return false;
 		}
 
 		internal bool AddCargo(Cargo cargo, DateTime time)
         {
-            cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
-            return Inventory.Add(cargo);
+            if (Inventory.Count < MaxCapacity)
+            {
+                cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
+                return Inventory.Add(cargo);
+            }
+			return false;
         }
 
 		internal bool RemoveCargo(Cargo cargo)

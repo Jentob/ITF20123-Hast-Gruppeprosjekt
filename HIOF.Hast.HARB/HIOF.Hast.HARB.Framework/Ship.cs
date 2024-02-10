@@ -30,7 +30,7 @@
 		public string Name { get; set; } = name;
 		public ShipSize Size { get; } = size;
 		public List<LogEntry> Log { get; } = [];
-		public List<Cargo> Cargohold { get; } = [];
+		public HashSet<Cargo> Cargohold { get; } = [];
 		public int MaxCargoWeightInKG { get; } = maxCarryWeightInKG;
         public List<SailingSchedule> SailingSchedules { get; } = [];
 
@@ -44,7 +44,7 @@
 		private bool CargoCheck(Cargo cargo)
 		{
 			double weight = cargo.WeightInKG;
-			foreach (var item in Cargohold)
+			foreach (Cargo item in Cargohold)
 				weight += item.WeightInKG;
 			if (weight < MaxCargoWeightInKG)
 				return true;

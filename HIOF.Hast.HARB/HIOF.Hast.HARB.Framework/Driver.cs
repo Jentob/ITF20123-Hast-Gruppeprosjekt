@@ -10,7 +10,10 @@
             while (time < endTime)
             {
                 Update(harbor, time);
-                time.AddMinutes(1);
+                time = time.AddMinutes(1);
+
+				if (time == time.Date)
+					Console.WriteLine($"{time:dd.MM.yy} / {endTime:dd.MM.yy}");
             }
         }
 

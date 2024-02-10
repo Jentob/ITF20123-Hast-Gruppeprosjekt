@@ -1,15 +1,73 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
     /// <summary>Represents a harbor</summary>
-    public class Harbor
+    public class Harbor(string name)
     {
+		private static int idCount = 0;
+		public int Id { get; } = idCount++;
+		public string Name { get; set; } = name;
         /// <summary>Represents a queue for ships wanting to dock.</summary>
-        public Queue<Ship> WaitingQueue { get; } = new Queue<Ship>();
-        public List<Port> Port { get; } = [];
+        public List<Ship> WaitingQueue { get; } = [];
+        public List<Warehouse> Warehouses { get; } = [];
+        public List<Port> Ports { get; } = [];
       
+        public void AddWarehouse(Warehouse warehouse)
+        {
+            Warehouses.Add(warehouse);
+        }
 
-        /// <summary>CLI to configure a harbor.</summary>
-        public void ConfigureHarbor()
+		public void AddPort(Port port)
+		{
+			Ports.Add(port);
+            Ports.Sort((p1, p2) => p1.Size.CompareTo(p2.Size));
+		}
+
+        public void AddShip(Ship ship)
+        {
+            WaitingQueue.Add(ship);
+        }
+
+        private bool ArePortsAvailable()
+        {
+            foreach (Port port in Ports)
+            {
+                foreach (Ship ship in WaitingQueue)
+                {
+					if (port.OccupyingShip == null && port.Size >= ship.Size)
+						return true;
+				}
+            }
+            return false;
+        }
+
+		public void DockShips()
+        {
+			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+				return;
+
+			Ship[] shipsToDock = [.. WaitingQueue]; 
+
+			foreach (Ship ship in shipsToDock)
+			{
+				foreach (Port port in Ports)
+				{
+					if (port.OccupyingShip == null && port.Size >= ship.Size)
+					{
+						port.OccupyPort(ship);
+                        WaitingQueue.Remove(ship);
+						if (!ArePortsAvailable())
+							return;
+						break;
+					}
+				}
+			}
+		}
+
+
+
+
+		/// <summary>CLI to configure a harbor.</summary>
+		public void ConfigureHarbor()
         {
             Console.WriteLine("Welcome to our harbor simulator");
             
@@ -27,7 +85,7 @@
                 Ship? ship = CreateShip(i + 1);
                 if (ship != null)
                 {
-                    WaitingQueue.Enqueue(ship);
+                    WaitingQueue.Add(ship);
 
                     Console.WriteLine($"The ship {ship.Name} has been added to the harbor.");
                 }
@@ -60,5 +118,10 @@
             }
             return ship;
         }
-    }
+
+		public override string ToString()
+		{
+			return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
+		}
+	}
 }
