@@ -38,7 +38,7 @@
             return false;
         }
 
-        public bool RemoveCargo(ICargo cargo, DateTime? time = null)
+        public bool RemoveCargo(Cargo cargo, DateTime? time = null)
 		{
 			if (OccupyingShip != null && OccupyingShip.RemoveCargo(cargo, time)) return true;
             return false;

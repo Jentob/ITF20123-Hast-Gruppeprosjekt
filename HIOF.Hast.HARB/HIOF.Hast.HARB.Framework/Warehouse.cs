@@ -19,15 +19,15 @@ namespace HIOF.Hast.HARB.Framework
                 else throw new Exception("Inventory is not empty.");
             }
         }
-        public HashSet<ICargo> Inventory { get; } = [];
+        public HashSet<Cargo> Inventory { get; } = [];
 
-        public bool AddCargo(Cargo cargo, DateTime? time = null)
+        internal bool AddCargo(Cargo cargo, DateTime? time = null)
         {
             if(time != null) cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
             return Inventory.Add(cargo);
         }
 
-        public bool RemoveCargo(Cargo cargo, DateTime? time = null)
+        internal bool RemoveCargo(Cargo cargo, DateTime? time = null)
         {
             if(time != null) cargo.RecordHistory(new(time, $"Removed from warehouse {Name}({Id})"));
             return Inventory.Remove(cargo);

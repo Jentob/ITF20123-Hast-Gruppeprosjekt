@@ -6,23 +6,17 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
     {
         static void Main(string[] args)
         {
-            Harbor harbor = new Harbor();
+            Harbor harbor = new();
 
-            // Creating Harbor
-            harbor.ConfigureHarbor();
+            DateTime start = DateTime.Parse("2024-01-01");
+            DateTime end = DateTime.Parse("2024-04-01");
 
-            harbor.GetNumberOfShips();
+            // TODO: Her setter vi opp havnen
 
-            Console.WriteLine("Simulasjon av havn startet. . .");
+            Driver.Run(harbor, start, end);
 
-            /*ISimulationDriver driver = new DriverImplementation();
-            driver.Run();*/
-
-            Console.WriteLine("Simulasjon er ferdig. Skriv inn ID på skip for å se historikk:");
-
-            // implementer 
-
-
+            // TODO: Her kan vi hente ut data
+            
         }
     }
 }

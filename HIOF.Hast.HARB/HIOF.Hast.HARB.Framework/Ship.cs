@@ -1,6 +1,6 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-	/// <summary>Represents arbritary ship sizes.</summary>
+	/// <summary>Represents an arbritary ship size.</summary>
 	public enum ShipSize
 	{
 		Small,
@@ -41,7 +41,7 @@
 		public string Name { get; set; } = name;
 		public ShipSize Size { get; } = size;
 		public List<LogEntry> Log { get; } = [];
-		public List<ICargo> Cargohold { get; } = [];
+		public List<Cargo> Cargohold { get; } = [];
 		public int MaxCargoWeightInKG { get; } = maxCarryWeightInKG;
         public List<SailingSchedule> SailingSchedules { get; } = [];
 
@@ -54,7 +54,7 @@
 
 		/// <summary>Adds cargo to the cargohold</summary>
 		/// <param name="cargo">The cargo to be loaded onboard the ship</param>
-		public bool AddCargo(ICargo cargo, DateTime? time = null)
+		internal bool AddCargo(Cargo cargo, DateTime? time = null)
 		{
 			double weight = cargo.WeightInKG;
 			foreach (var item in Cargohold)
@@ -77,7 +77,7 @@
 		/// <summary>Remove cargo from the ship object.</summary>
 		/// <param name="cargo"></param>
 		/// <returns>Returns the cargo interface.</returns>
-		public bool RemoveCargo(ICargo cargo, DateTime? time = null)
+		internal bool RemoveCargo(Cargo cargo, DateTime? time = null)
 		{
 			if (!Cargohold.Contains(cargo)) return false;
 			Cargohold.Remove(cargo);
@@ -89,7 +89,7 @@
 			return true;
 		}
 
-        public void RecordHistory(LogEntry entry) => Log.Add(entry);
+        internal void RecordHistory(LogEntry entry) => Log.Add(entry);
 
         public override string ToString() => $"Ship - {Name}({Id})";
     }

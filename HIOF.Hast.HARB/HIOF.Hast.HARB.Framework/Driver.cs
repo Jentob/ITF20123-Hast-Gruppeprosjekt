@@ -1,6 +1,6 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    internal class Driver
+    public class Driver
     {
 		/// <summary>Runs the simulation.</summary>
 		/// <param name="daysToRun">The amount of days you wish to simulate</param>
@@ -16,7 +16,7 @@
 
 		private static void Update(Harbor harbor, DateTime time)
 		{
-			// Do something
+			// TODO: ???
 		}
 	}
 }

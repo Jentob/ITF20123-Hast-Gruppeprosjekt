@@ -1,62 +1,42 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    /// <summary>
-    /// Class representing a harbor simulator.
-    /// </summary>
+    /// <summary>Represents a harbor</summary>
     public class Harbor
     {
-        /// <summary>
-        /// Gets the queue of ships waiting to enter the harbor.
-        /// </summary>
+        /// <summary>Represents a queue for ships wanting to dock.</summary>
         public Queue<Ship> WaitingQueue { get; } = new Queue<Ship>();
-        /// <summary>
-        /// Gets the list of ports in the harbor.
-        /// </summary>
-        public List<Port> Port { get; } = new List<Port> { };
+        public List<Port> Port { get; } = [];
       
 
-        /// <summary>
-        /// Method to configure the harbor.
-        /// </summary>
-        /// 
+        /// <summary>CLI to configure a harbor.</summary>
         public void ConfigureHarbor()
         {
             Console.WriteLine("Welcome to our harbor simulator");
-
-            // Handle the number of ships
-            int numberOfShips = GetNumberOfShips();
-
-            // Create ships based on user input
-            for (int i = 0; i < numberOfShips; i++)
-            {
-                Ship ship = CreateShip(i + 1);
-                WaitingQueue.Enqueue(ship);
-
-                Console.WriteLine($"The ship {ship.Name} has been added to the harbor.");
-            }
-
-        }
-
-        /// <summary>
-        /// Method to set the number of ships to be added to the harbor.
-        /// </summary>
-        private int GetNumberOfShips()
-        {
+            
             Console.Write("Enter the number of ships you want to add for simulation: ");
+
             int numberOfShips;
 
             while (!int.TryParse(Console.ReadLine(), out numberOfShips) || numberOfShips <= 0)
             {
                 Console.Write("Invalid number, please enter a positive integer: ");
             }
+    
+            for (int i = 0; i < numberOfShips; i++)
+            {
+                Ship? ship = CreateShip(i + 1);
+                if (ship != null)
+                {
+                    WaitingQueue.Enqueue(ship);
 
-            return numberOfShips;
+                    Console.WriteLine($"The ship {ship.Name} has been added to the harbor.");
+                }
+                
+            }
         }
 
-        /// <summary>
-        /// Method to create a ship for the harbor: name, size, and whether recurring sailings are desired.
-        /// </summary>
-        private Ship? CreateShip(int index)
+        /// <summary>Used by ConfigureHarbor() to create ships.</summary>
+        private static Ship? CreateShip(int index)
         {
             Console.Write($"Enter the name of ship {index}: ");
             string? shipName = Console.ReadLine();
