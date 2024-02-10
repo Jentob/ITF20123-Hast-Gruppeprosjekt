@@ -82,7 +82,7 @@
     
             for (int i = 0; i < numberOfShips; i++)
             {
-                Ship? ship = CreateShip(i + 1);
+                Ship? ship = CliCreateShip(i + 1);
                 if (ship != null)
                 {
                     WaitingQueue.Add(ship);
@@ -94,30 +94,47 @@
         }
 
         /// <summary>Used by ConfigureHarbor() to create ships.</summary>
-        private static Ship? CreateShip(int index)
+        private Ship? CliCreateShip(int index)
         {
-            Console.Write($"Enter the name of ship {index}: ");
-            string? shipName = Console.ReadLine();
+			Console.Write($"Enter the name of ship {index}: ");
+			string? shipName = Console.ReadLine();
 
-            Console.Write($"Choose the size of the ship (Small/Medium/Large) for {shipName}: ");
-            ShipSize? shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
+			Console.Write($"Choose the size of the ship (Small/Medium/Large) for {shipName}: ");
+			ShipSize? shipSize = Enum.Parse<ShipSize>(Console.ReadLine(), true);
+			double maxCarryWeight = 0;
+			switch (shipSize)
+			{
+				case ShipSize.Small:
+					maxCarryWeight = 100;
+					break;
+				case ShipSize.Medium:
+					maxCarryWeight = 500;
+					break;
+				case ShipSize.Large:
+					maxCarryWeight = 100;
+					break;
+				default:
+					Console.WriteLine("");
+					break;
+			}
 
-            Console.Write($"Do you want recurring sailings for {shipName}? (Yes/No): ");
-            bool? hasRecurringSailings = Console.ReadLine().Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase);
+			Console.Write($"Do you want recurring sailings for {shipName}? (Yes/No): ");
+			bool? hasRecurringSailings = Console.ReadLine().Trim().Equals("Yes", StringComparison.OrdinalIgnoreCase);
 
-            if (shipName == null || shipSize == null || hasRecurringSailings == null) {
-                return null;
-            }
+			if (shipName == null || shipSize == null || hasRecurringSailings == null)
+			{
+				return null;
+			}
 
-            Ship ship = new Ship(shipName, (ShipSize)shipSize, 1000);
+			Ship ship = new Ship(shipName, (ShipSize)shipSize, maxCarryWeight);
 
-            // TODO: Add logic for recurring sailings
-            if ((bool)hasRecurringSailings)
-            {
-              
-            }
-            return ship;
-        }
+			// TODO: Add logic for recurring sailings
+			if ((bool)hasRecurringSailings)
+			{
+
+			}
+			return ship;
+		}
 
 		public override string ToString()
 		{

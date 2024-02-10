@@ -12,18 +12,17 @@
 	{
 		public DateTime time = _time;
 		public string message = _message;
-		
-        public override readonly string ToString()
+		public override readonly string ToString()
         {
             return $"{time} - {message}";
         }
     }
 
-	/// <summary>Represents a ship able to hold cargo.</summary>
-	/// <param name="name">Name of ship.</param>
-	/// <param name="size">Size of ship.</param>
-	/// <param name="maxCarryWeightInKG">Represents max cargo weight the ship is able to handle.</param>
-	public class Ship(string name, ShipSize size, int maxCarryWeightInKG)
+    /// <summary>Represents a ship able to hold cargo.</summary>
+    /// <param name="name">Name of ship.</param>
+    /// <param name="size">Size of ship.</param>
+    /// <param name="maxCarryWeightInTons">Represents max cargo weight the ship is able to handle.</param>
+    public class Ship(string name, ShipSize size, double maxCarryWeightInTons)
 	{
 		private static int idCount = 0;
 		public int Id { get; } =idCount++;
@@ -31,10 +30,8 @@
 		public ShipSize Size { get; } = size;
 		public List<LogEntry> Log { get; } = [];
 		public HashSet<Cargo> Cargohold { get; } = [];
-		public int MaxCargoWeightInKG { get; } = maxCarryWeightInKG;
+		public double MaxCargoWeightInTons { get; } = maxCarryWeightInTons;
         public List<SailingSchedule> SailingSchedules { get; } = [];
-
-
 
         public void AddToSailingSchedule(DateTime departureTime, TimeSpan interval)
         {
@@ -43,10 +40,10 @@
 
 		private bool CargoCheck(Cargo cargo)
 		{
-			double weight = cargo.WeightInKG;
+			double weight = cargo.WeightInTons;
 			foreach (Cargo item in Cargohold)
-				weight += item.WeightInKG;
-			if (weight < MaxCargoWeightInKG)
+				weight += item.WeightInTons;
+			if (weight < MaxCargoWeightInTons)
 				return true;
 			return false;
 		}
@@ -55,7 +52,7 @@
 		/// <param name="cargo">The cargo to be loaded onboard the ship</param>
 		internal bool AddCargo(Cargo cargo)
 		{
-			if(!CargoCheck(cargo))
+			if (!CargoCheck(cargo))
 				return false;
 
 			Cargohold.Add(cargo);
@@ -70,7 +67,7 @@
 
 			cargo.RecordHistory(new(time, $"Added to ship {Name}({Id})"));
 			RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
-		
+
 			Cargohold.Add(cargo);
 
 			return true;
@@ -83,7 +80,7 @@
 		{
 			if (!Cargohold.Contains(cargo)) return false;
 			Cargohold.Remove(cargo);
-			
+
 			return true;
 		}
 
@@ -91,15 +88,15 @@
 		{
 			if (!Cargohold.Contains(cargo)) return false;
 			Cargohold.Remove(cargo);
-						
+
 			RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
 			cargo.RecordHistory(new(time, $"Removed from ship {Name}({Id})"));
-			
+
 			return true;
 		}
 
-        internal void RecordHistory(LogEntry entry) => Log.Add(entry);
+		internal void RecordHistory(LogEntry entry) => Log.Add(entry);
 
-        public override string ToString() => $"Ship - {Name}({Id})";
-    }
+		public override string ToString() => $"Ship - {Name}({Id})";
+	}
 }
