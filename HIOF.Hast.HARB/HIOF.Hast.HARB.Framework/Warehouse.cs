@@ -21,16 +21,21 @@ namespace HIOF.Hast.HARB.Framework
         }
         public HashSet<Cargo> Inventory { get; } = [];
 
+        internal bool IsWarehouseFull()
+        {
+            return Inventory.Count < MaxCapacity;
+        }
+
 		internal bool AddCargo(Cargo cargo)
 		{
-            if (Inventory.Count < MaxCapacity)
+            if (IsWarehouseFull())
 			    return Inventory.Add(cargo);
             return false;
 		}
 
 		internal bool AddCargo(Cargo cargo, DateTime time)
         {
-            if (Inventory.Count < MaxCapacity)
+            if (IsWarehouseFull())
             {
                 cargo.RecordHistory(new(time, $"Added to warehouse {Name}({Id})"));
                 return Inventory.Add(cargo);
@@ -38,17 +43,23 @@ namespace HIOF.Hast.HARB.Framework
 			return false;
         }
 
-		internal bool RemoveCargo(Cargo cargo)
+		internal Cargo? RemoveCargo(Cargo cargo)
 		{
-			return Inventory.Remove(cargo);
+            if(Inventory.Remove(cargo))
+			    return cargo;
+            return null;
 		}
 
-		internal bool RemoveCargo(Cargo cargo, DateTime time)
+		internal Cargo? RemoveCargo(Cargo cargo, DateTime time)
         {
-            cargo.RecordHistory(new(time, $"Removed from warehouse {Name}({Id})"));
-            return Inventory.Remove(cargo);
-        }
+            if(Inventory.Remove(cargo))
+            {
+                cargo.RecordHistory(new(time, $"Removed from warehouse {Name}({Id})"));
+			    return cargo;
+            }
+            return null;
+		}
 
-        public override string ToString() => $"Cargo - {Name}({Id}) - {Inventory.Count} / {MaxCapacity}";
+        public override string ToString() => $"{GetType().Name} - {Name}({Id}) - {Inventory.Count} / {MaxCapacity} items";
     }
 }

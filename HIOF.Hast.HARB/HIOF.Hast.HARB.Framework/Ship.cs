@@ -38,11 +38,16 @@
             SailingSchedules.Add(new SailingSchedule(departureTime, interval));
         }
 
-		private bool CargoCheck(Cargo cargo)
-		{
-			double weight = cargo.WeightInTons;
+		public double CargoWeight() {
+			double weight = 0;
 			foreach (Cargo item in Cargohold)
 				weight += item.WeightInTons;
+			return weight;
+		}
+
+		private bool CargoCheck(Cargo cargo)
+		{
+			double weight = cargo.WeightInTons + CargoWeight();
 			if (weight < MaxCargoWeightInTons)
 				return true;
 			return false;
@@ -76,27 +81,27 @@
 		/// <summary>Remove cargo from the ship object.</summary>
 		/// <param name="cargo"></param>
 		/// <returns>Returns the cargo interface.</returns>
-		internal bool RemoveCargo(Cargo cargo)
+		internal Cargo? RemoveCargo(Cargo cargo)
 		{
-			if (!Cargohold.Contains(cargo)) return false;
+			if (!Cargohold.Contains(cargo)) return null;
 			Cargohold.Remove(cargo);
 
-			return true;
+			return cargo;
 		}
 
-		internal bool RemoveCargo(Cargo cargo, DateTime time)
+		internal Cargo? RemoveCargo(Cargo cargo, DateTime time)
 		{
-			if (!Cargohold.Contains(cargo)) return false;
+			if (!Cargohold.Contains(cargo)) return null;
 			Cargohold.Remove(cargo);
 
 			RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
 			cargo.RecordHistory(new(time, $"Removed from ship {Name}({Id})"));
 
-			return true;
+			return cargo;
 		}
 
 		internal void RecordHistory(LogEntry entry) => Log.Add(entry);
 
-		public override string ToString() => $"Ship - {Name}({Id})";
+		public override string ToString() => $"{GetType().Name} - {Name}({Id}) - Size: {Size} - Cargo: {CargoWeight()} / {MaxCargoWeightInTons} metric tons";
 	}
 }

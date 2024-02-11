@@ -63,8 +63,56 @@
 			}
 		}
 
+        public void DockShips(DateTime time)
+        {
+			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+				return;
 
+			Ship[] shipsToDock = [.. WaitingQueue]; 
 
+			foreach (Ship ship in shipsToDock)
+			{
+				foreach (Port port in Ports)
+				{
+					if (port.OccupyingShip == null && port.Size >= ship.Size)
+					{
+                        ship.RecordHistory(new(time, $"Docked at {Name}({Id})"));
+						port.OccupyPort(ship);
+                        WaitingQueue.Remove(ship);
+						if (!ArePortsAvailable())
+							return;
+						break;
+					}
+				}
+			}
+		}
+
+        public void OffloadCargoFromShips(DateTime time)
+        {
+            foreach (Port port in Ports)
+            {
+                if (port.OccupyingShip == null)
+                    continue;
+                
+                foreach (Warehouse warehouse in Warehouses)
+                {
+                    if (warehouse.IsWarehouseFull())
+                        continue;
+                    foreach (Cargo cargo in port.OccupyingShip.Cargohold)
+                    {
+                        Cargo? c = port.OccupyingShip.RemoveCargo(cargo, time);
+                        if (c != null)
+                            if(!warehouse.AddCargo(c, time))
+                                break;
+                    }
+                }
+            }     
+        }
+        
+        // TODO: Metode for å flytte last på skip. Samme implementasjon som OffloadCargoFromShips men fra Warehouse til Ship
+        // TODO: Metode for å sende skip fra havnen hvis di har en seiling
+        // TODO: Metode for å flytte skip fra seilinger inn i WaitingQueue
+        // TODO: Fikse et system for seilinger
 
 		/// <summary>CLI to configure a harbor.</summary>
 		public void ConfigureHarbor()

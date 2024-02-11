@@ -73,22 +73,23 @@
             return false;
         }
 
-		public bool RemoveCargo(Cargo cargo)
+		public Cargo? RemoveCargo(Cargo cargo)
 		{
-			if (OccupyingShip != null && OccupyingShip.RemoveCargo(cargo)) return true;
-			return false;
+			if (OccupyingShip != null) return OccupyingShip.RemoveCargo(cargo);
+			return null;
 		}
 
-		public bool RemoveCargo(Cargo cargo, DateTime time)
+		public Cargo? RemoveCargo(Cargo cargo, DateTime time)
 		{
-			if (OccupyingShip != null && OccupyingShip.RemoveCargo(cargo, time)) return true;
-            return false;
+			if (OccupyingShip != null) return OccupyingShip.RemoveCargo(cargo, time);
+            return null;
 		}
 
         public override string ToString()
         {
-            if (OccupyingShip != null) return $"Port - {Name}({Id}) - Occupied by {OccupyingShip}";
-            else return $"Port - {Name}({Id}) - Not currently occupied";
+            string str = $"{GetType().Name} - {Name}({Id}) - Max size: {Size}";
+            if (OccupyingShip != null) return str + $" - Occupied by {OccupyingShip}";
+            else return str + " - Not currently occupied";
         }
     }
 }

@@ -13,13 +13,18 @@
                 time = time.AddMinutes(1);
 
 				if (time == time.Date)
-					Console.WriteLine($"{time:dd.MM.yy} / {endTime:dd.MM.yy}");
+					Console.Write($"\r{time:dd.MM.yyyy} / {endTime:dd.MM.yyyy}");
             }
+			Console.WriteLine();
         }
 
 		private static void Update(Harbor harbor, DateTime time)
 		{
-			// TODO: ???
+			harbor.DockShips(time);
+			harbor.OffloadCargoFromShips(time);
+			//harbor.LoadCargoToShips(time);
+			//harbor.ReleaseShips(time);
+			//harbor.QueueShips();
 		}
 	}
 }

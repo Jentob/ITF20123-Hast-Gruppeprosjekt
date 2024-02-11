@@ -13,6 +13,6 @@
 
         internal void RecordHistory(LogEntry entry) => Log.Add(entry);
 
-        public override string ToString() => $"Cargo - {Name}({Id}) - {WeightInTons}";
+        public override string ToString() => $"{GetType().Name} - {Name}({Id}) - {WeightInTons} metric tons";
     }
 }
