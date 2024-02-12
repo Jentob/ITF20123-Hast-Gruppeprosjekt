@@ -22,9 +22,9 @@
 		{
 			harbor.DockShips(time);
 			harbor.OffloadCargoFromShips(time);
-			//harbor.LoadCargoToShips(time);
-			//harbor.ReleaseShips(time);
-			//harbor.QueueShips();
+			harbor.LoadCargoToShips(time);
+			harbor.ReleaseShips(time);
+			harbor.QueueShips(time);
 		}
 	}
 }

@@ -7,6 +7,13 @@
 		Medium,
 		Large,
 	}
+	/// <summary>Indicates if a sailing is recurring.</summary>
+	public enum RecurringSailing
+	{
+		None,
+		Daily,
+		Weekly,
+	}
 	/// <summary>LogEntry keeps time and event separated.</summary>
 	public struct LogEntry(DateTime _time, string _message)
 	{
@@ -21,8 +28,8 @@
     /// <summary>Represents a ship able to hold cargo.</summary>
     /// <param name="name">Name of ship.</param>
     /// <param name="size">Size of ship.</param>
-    /// <param name="maxCarryWeightInTons">Represents max cargo weight the ship is able to handle.</param>
-    public class Ship(string name, ShipSize size, double maxCarryWeightInTons)
+    /// <param name="maxCargoWeightInTons">Represents max cargo weight the ship is able to handle.</param>
+    public class Ship(string name, ShipSize size, double maxCargoWeightInTons, DateTime? sailingDate = null, string destination = "UNKNOWN", int triplength = 1, RecurringSailing recurringSailing = RecurringSailing.Weekly)
 	{
 		private static int idCount = 0;
 		public int Id { get; } =idCount++;
@@ -30,13 +37,12 @@
 		public ShipSize Size { get; } = size;
 		public List<LogEntry> Log { get; } = [];
 		public HashSet<Cargo> Cargohold { get; } = [];
-		public double MaxCargoWeightInTons { get; } = maxCarryWeightInTons;
-        public List<SailingSchedule> SailingSchedules { get; } = [];
+		public double MaxCargoWeightInTons { get; } = maxCargoWeightInTons;
 
-        public void AddToSailingSchedule(DateTime departureTime, TimeSpan interval)
-        {
-            SailingSchedules.Add(new SailingSchedule(departureTime, interval));
-        }
+		public DateTime? SailingDate { get; set; } = sailingDate;
+		public int TripLength { get; set; } = triplength;
+        public RecurringSailing Recurring { get; set; } = recurringSailing;
+		public string Destination { get; set; }= destination;
 
 		public double CargoWeight() {
 			double weight = 0;
@@ -48,7 +54,7 @@
 		private bool CargoCheck(Cargo cargo)
 		{
 			double weight = cargo.WeightInTons + CargoWeight();
-			if (weight < MaxCargoWeightInTons)
+			if (weight <= MaxCargoWeightInTons)
 				return true;
 			return false;
 		}
@@ -102,6 +108,6 @@
 
 		internal void RecordHistory(LogEntry entry) => Log.Add(entry);
 
-		public override string ToString() => $"{GetType().Name} - {Name}({Id}) - Size: {Size} - Cargo: {CargoWeight()} / {MaxCargoWeightInTons} metric tons";
+		public override string ToString() => $"{GetType().Name} - {Name}({Id}) - Size: {Size} - Cargo: {Math.Round(CargoWeight(), 2)} / {MaxCargoWeightInTons} metric tons";
 	}
 }

@@ -1,4 +1,6 @@
-﻿namespace HIOF.Hast.HARB.Framework
+﻿using System.ComponentModel;
+
+namespace HIOF.Hast.HARB.Framework
 {
     /// <summary>Represents a harbor</summary>
     public class Harbor(string name)
@@ -8,6 +10,7 @@
 		public string Name { get; set; } = name;
         /// <summary>Represents a queue for ships wanting to dock.</summary>
         public List<Ship> WaitingQueue { get; } = [];
+        public List<Ship> SailingShips { get; } = [];
         public List<Warehouse> Warehouses { get; } = [];
         public List<Port> Ports { get; } = [];
       
@@ -40,6 +43,17 @@
             return false;
         }
 
+        public void AddCargo(Cargo cargo)
+        {
+            foreach (Warehouse warehouse in Warehouses)
+            {
+                if (warehouse.IsWarehouseFull())
+                    continue;
+                if(warehouse.AddCargo(cargo))
+                    break;
+            }
+        }
+
 		public void DockShips()
         {
 			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
@@ -63,7 +77,7 @@
 			}
 		}
 
-        public void DockShips(DateTime time)
+        internal void DockShips(DateTime time)
         {
 			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
 				return;
@@ -76,7 +90,7 @@
 				{
 					if (port.OccupyingShip == null && port.Size >= ship.Size)
 					{
-                        ship.RecordHistory(new(time, $"Docked at {Name}({Id})"));
+                        ship.RecordHistory(new(time, $"Docked at {port.Name}({port.Id})"));
 						port.OccupyPort(ship);
                         WaitingQueue.Remove(ship);
 						if (!ArePortsAvailable())
@@ -93,7 +107,7 @@
             {
                 if (port.OccupyingShip == null)
                     continue;
-                
+
                 foreach (Warehouse warehouse in Warehouses)
                 {
                     if (warehouse.IsWarehouseFull())
@@ -101,18 +115,88 @@
                     foreach (Cargo cargo in port.OccupyingShip.Cargohold)
                     {
                         Cargo? c = port.OccupyingShip.RemoveCargo(cargo, time);
-                        if (c != null)
-                            if(!warehouse.AddCargo(c, time))
-                                break;
+                        if (c != null && !warehouse.AddCargo(c, time))
+                            break;
                     }
                 }
-            }     
+            }
         }
         
-        // TODO: Metode for å flytte last på skip. Samme implementasjon som OffloadCargoFromShips men fra Warehouse til Ship
-        // TODO: Metode for å sende skip fra havnen hvis di har en seiling
-        // TODO: Metode for å flytte skip fra seilinger inn i WaitingQueue
-        // TODO: Fikse et system for seilinger
+        public void LoadCargoToShips(DateTime time)
+        {
+            foreach (Warehouse warehouse in Warehouses)
+            {
+                foreach (Cargo c in warehouse.Inventory)
+                {
+                    Cargo? cargo = warehouse.RemoveCargo(c, time);
+                    if (cargo == null)
+                        continue;
+                    bool isFull = true;
+                    foreach (Port port in Ports)
+                    {
+                        if (port.OccupyingShip == null)
+                        continue;
+                        if (port.OccupyingShip.AddCargo(cargo, time))
+                        {
+                            isFull = false;
+                            break;
+                        }
+                    }
+                    if (isFull)
+                    {
+                        warehouse.AddCargo(cargo, time);
+                        return;
+                    }
+                }
+            }
+        }
+
+		public void ReleaseShips(DateTime time)
+        {
+            foreach (Port port in Ports)
+            {
+                if (port.OccupyingShip != null && port.OccupyingShip.SailingDate != null && port.OccupyingShip.SailingDate <= time)
+                {
+                    Ship? leavingShip = port.LeavePort(time);
+                    // Eneste grunnen for denne sjekken er fordi IDEen klager
+                    // LeavePort() vil ikke returnere null her
+                    if (leavingShip == null)
+                        continue;
+                    leavingShip.RecordHistory(new(time, $"Sailing to {leavingShip.Destination}"));
+                    SailingShips.Add(leavingShip);
+                }
+            }
+        }
+
+		public void QueueShips(DateTime time)
+        {
+            Ship[] shipsToQueue = [.. SailingShips];
+            foreach (Ship ship in shipsToQueue)
+            {
+                if (ship.SailingDate != null && ((DateTime)ship.SailingDate).AddDays(ship.TripLength) <= time)
+                {
+                    ship.RecordHistory(new(time, $"Returned from {ship.Destination}"));
+
+                    switch (ship.Recurring)
+                    {
+                        case RecurringSailing.None:
+                            ship.SailingDate = null;
+                            break;
+                        case RecurringSailing.Daily:
+                            ship.SailingDate = ((DateTime)ship.SailingDate).AddDays(1);
+                            break;
+                        case RecurringSailing.Weekly:
+                            ship.SailingDate = ((DateTime)ship.SailingDate).AddDays(7);
+                            break;
+                        default:
+                        throw new Exception();
+                    };
+                    if(SailingShips.Remove(ship))
+                        WaitingQueue.Add(ship);
+                }
+            }
+        }
+        
 
 		/// <summary>CLI to configure a harbor.</summary>
 		public void ConfigureHarbor()
