@@ -11,6 +11,11 @@
         public ShipSize Size { get; } = size;
         public Ship? OccupyingShip { get; private set; }
 
+        /// <summary>
+        /// Used for checking if a ship can dock.
+        /// </summary>
+        /// <param name="ship">The ship to check with.</param>
+        /// <returns><c>true</c> if it can. <c>false</c> if it can not.</returns>
         private bool CanShipDock(Ship ship)
         {
             if(OccupyingShip == null && ship.Size <= Size)
@@ -18,7 +23,12 @@
             return false;
         }
 
-        public bool OccupyPort(Ship ship)
+        /// <summary>
+        /// Docks the ship.
+        /// </summary>
+        /// <param name="ship">The ship to dock.</param>
+        /// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
+        internal bool OccupyPort(Ship ship)
         {
             if (CanShipDock(ship))
             {
@@ -28,7 +38,13 @@
             return false;
         }
 
-		public bool OccupyPort(Ship ship, DateTime time)
+        /// <summary>
+        /// Works the same as <see cref="OccupyPort(Ship) "/> but also logs.
+        /// </summary>
+        /// <param name="ship">The ship to dock.</param>
+        /// <param name="time">Used for logging.</param>
+        /// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
+		internal bool OccupyPort(Ship ship, DateTime time)
         {
 			if (CanShipDock(ship))
 			{
@@ -39,7 +55,11 @@
 			return false;
 		}
 
-		public Ship? LeavePort()
+        /// <summary>
+        /// Undocks the ship from the port.
+        /// </summary>
+        /// <returns>The ship on success, else returns null.</returns>
+		internal Ship? LeavePort()
 		{
 			if (OccupyingShip != null)
 			{
@@ -50,7 +70,12 @@
 			return null;
 		}
 
-		public Ship? LeavePort(DateTime time)
+        /// <summary>
+        /// Works the same as <see cref="LeavePort() "/> but also logs.
+        /// </summary>
+        /// <param name="time">Used for logging.</param>
+        /// <returns>The ship on success, else returns null.</returns>
+		internal Ship? LeavePort(DateTime time)
         {
             if (OccupyingShip != null) {
                 Ship? shipToLeave = OccupyingShip;
@@ -61,25 +86,47 @@
             return null;
         }
 
-		public bool AddCargo(Cargo cargo)
+        /// <summary>
+        /// Loads cargo onto the docked ship.
+        /// </summary>
+        /// <param name="cargo">The cargo to load onboard.</param>
+        /// <returns><c>true</c> on success. <c>false</c> if it fails.</returns>
+		internal bool AddCargo(Cargo cargo)
 		{
 			if (OccupyingShip != null && OccupyingShip.AddCargo(cargo)) return true;
 			return false;
 		}
 
-		public bool AddCargo(Cargo cargo, DateTime time)
+        /// <summary>
+        /// Works the same as <see cref="AddCargo(Cargo) "/> but also logs.
+        /// </summary>
+        /// <param name="cargo">The cargo to load onboard.</param>
+        /// <param name="time">Used for logging.</param>
+        /// <returns><c>true</c> on success. <c>false</c> if it fails.</returns>
+		internal bool AddCargo(Cargo cargo, DateTime time)
         {
             if (OccupyingShip != null && OccupyingShip.AddCargo(cargo, time)) return true;
             return false;
         }
 
-		public Cargo? RemoveCargo(Cargo cargo)
+        /// <summary>
+        /// Loads cargo off the docked ship.
+        /// </summary>
+        /// <param name="cargo">The cargo to remove.</param>
+        /// <returns>The cargo on success, else returns null.</returns>
+		internal Cargo? RemoveCargo(Cargo cargo)
 		{
 			if (OccupyingShip != null) return OccupyingShip.RemoveCargo(cargo);
 			return null;
 		}
 
-		public Cargo? RemoveCargo(Cargo cargo, DateTime time)
+        /// <summary>
+        /// Works the same as <see cref="RemoveCargo(Cargo) "/> but also logs.
+        /// </summary>
+        /// <param name="cargo">The cargo to remove.</param>
+        /// <param name="time">Used for logging.</param>
+        /// <returns>The cargo on success, else returns null.</returns>
+		internal Cargo? RemoveCargo(Cargo cargo, DateTime time)
 		{
 			if (OccupyingShip != null) return OccupyingShip.RemoveCargo(cargo, time);
             return null;

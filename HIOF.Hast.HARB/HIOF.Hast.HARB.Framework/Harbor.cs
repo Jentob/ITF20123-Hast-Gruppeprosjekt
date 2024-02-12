@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 
 namespace HIOF.Hast.HARB.Framework
 {
@@ -8,28 +8,80 @@ namespace HIOF.Hast.HARB.Framework
 		private static int idCount = 0;
 		public int Id { get; } = idCount++;
 		public string Name { get; set; } = name;
-        /// <summary>Represents a queue for ships wanting to dock.</summary>
-        public List<Ship> WaitingQueue { get; } = [];
-        public List<Ship> SailingShips { get; } = [];
-        public List<Warehouse> Warehouses { get; } = [];
-        public List<Port> Ports { get; } = [];
-      
+        internal List<Ship> WaitingQueue { get; } = [];
+        internal List<Ship> SailingShips { get; } = [];
+        internal List<Warehouse> Warehouses { get; } = [];
+        internal List<Port> Ports { get; } = [];
+
+        /// <summary>
+        /// Retrieves a copy of ships waiting to dock.
+        /// </summary>
+        /// <returns>A list of the queue.</returns>
+        public IList<Ship> GetWaitingQueue()
+		{
+			return [.. WaitingQueue];
+		}
+
+        /// <summary>
+        /// Retrieves a copy of ships sailing.
+        /// </summary>
+        /// <returns>A collection of ships sailing.</returns>
+        public Collection<Ship> GetSailingShips()
+		{
+			return [.. SailingShips];
+		}
+
+        /// <summary>
+        /// Retrieves a copy of warehouses.
+        /// </summary>
+        /// <returns>A collection of the warehouses.</returns>
+        public Collection<Warehouse> GetWarehouses()
+		{
+			return [.. Warehouses];
+		}
+
+        /// <summary>
+        /// Retrieves a copy of ports.
+        /// </summary>
+        /// <returns>A collection of the ports.</returns>
+        public Collection<Port> GetPorts()
+		{
+			return [.. Ports];
+		}
+
+        /// <summary>
+        /// Used when setting up the harbor to add a warehouse.
+        /// </summary>
+        /// <param name="warehouse">The warehouse to be added to <see cref="Warehouses"/>.</param>
         public void AddWarehouse(Warehouse warehouse)
         {
             Warehouses.Add(warehouse);
         }
 
+        /// <summary>
+        /// Used when setting up the harbor to add a port.
+        /// </summary>
+        /// <param name="port">The port to be added to <see cref="Ports"/>.</param>
 		public void AddPort(Port port)
 		{
 			Ports.Add(port);
             Ports.Sort((p1, p2) => p1.Size.CompareTo(p2.Size));
 		}
-
+        
+        /// <summary>
+        /// Used when setting up the harbor to add a ship.
+        /// </summary>
+        /// <remarks>Ships are added to <see cref="WaitingQueue"/>.</remarks>
+        /// <param name="ship">The ship to be added to <see cref="WaitingQueue"/>.</param>
         public void AddShip(Ship ship)
         {
             WaitingQueue.Add(ship);
         }
 
+        /// <summary>
+        /// Used for checking if a port is available.
+        /// </summary>
+        /// <returns><c>true</c> if a port is empty. <c>false</c> if ports are full.</returns>
         private bool ArePortsAvailable()
         {
             foreach (Port port in Ports)
@@ -42,7 +94,12 @@ namespace HIOF.Hast.HARB.Framework
             }
             return false;
         }
-
+        
+        /// <summary>
+        /// Used when setting up the harbor to add cargo.
+        /// </summary>
+        /// <remarks>Cargo are added to the warehouses in <see cref="Warehouses"/>.</remarks>
+        /// <param name="cargo">The cargo to be added to a warehouse in <see cref="Warehouses"/>.</param>
         public void AddCargo(Cargo cargo)
         {
             foreach (Warehouse warehouse in Warehouses)
@@ -54,6 +111,10 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
+        /// <summary>
+        /// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
+        /// </summary>
+        // TODO: Optimaliser
 		public void DockShips()
         {
 			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
@@ -77,6 +138,10 @@ namespace HIOF.Hast.HARB.Framework
 			}
 		}
 
+        /// <summary>
+        /// Works the same as <see cref="DockShips() "/> but also logs.
+        /// </summary>
+        /// <param name="time">Used for logging.</param>
         internal void DockShips(DateTime time)
         {
 			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
@@ -90,8 +155,7 @@ namespace HIOF.Hast.HARB.Framework
 				{
 					if (port.OccupyingShip == null && port.Size >= ship.Size)
 					{
-                        ship.RecordHistory(new(time, $"Docked at {port.Name}({port.Id})"));
-						port.OccupyPort(ship);
+						port.OccupyPort(ship, time);
                         WaitingQueue.Remove(ship);
 						if (!ArePortsAvailable())
 							return;
@@ -101,6 +165,10 @@ namespace HIOF.Hast.HARB.Framework
 			}
 		}
 
+        /// <summary>
+        /// Moves cargo from ships docked to warehouses.
+        /// </summary>
+        /// <param name="time">Used for logging.</param>
         public void OffloadCargoFromShips(DateTime time)
         {
             foreach (Port port in Ports)
@@ -122,10 +190,15 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
         
+        /// <summary>
+        /// Moves cargo from warehouses to ships docked.
+        /// </summary>
+        /// <param name="time">Used for logging.</param>
         public void LoadCargoToShips(DateTime time)
         {
             foreach (Warehouse warehouse in Warehouses)
             {
+                // TODO: Må endres
                 foreach (Cargo c in warehouse.Inventory)
                 {
                     Cargo? cargo = warehouse.RemoveCargo(c, time);
@@ -151,8 +224,13 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
+        /// <summary>
+        /// Moves ships from <see cref="Ports"/> to <see cref="SailingShips"/>.
+        /// </summary>
+        /// <param name="time">Used to for logging and for figuring out if a ship should leave.</param>
 		public void ReleaseShips(DateTime time)
         {
+            // TODO: Sjekke om et skip har vært for lenge til kai og flytte det til WaitingQueue
             foreach (Port port in Ports)
             {
                 if (port.OccupyingShip != null && port.OccupyingShip.SailingDate != null && port.OccupyingShip.SailingDate <= time)
@@ -168,6 +246,10 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
+        /// <summary>
+        /// Moves ships from <see cref="SailingShips"/> to <see cref="WaitingQueue"/>.
+        /// </summary>
+        /// <param name="time">Used to for logging and for figuring out if a ship should return.</param>
 		public void QueueShips(DateTime time)
         {
             Ship[] shipsToQueue = [.. SailingShips];
@@ -197,6 +279,92 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
         
+        /// <summary>
+        /// Collects all ships from all internal lists.
+        /// </summary>
+        /// <returns>Every existing ship in the harbor-obejct.</returns>
+        public IList<Ship> GetAllShips()
+        {
+            List<Ship> ships = [];
+            foreach (Port port in Ports)
+            {
+                if (port.OccupyingShip != null)
+                {
+                    ships.Add(port.OccupyingShip);
+                }
+            }
+            ships.AddRange(WaitingQueue);
+            ships.AddRange(SailingShips);
+
+            return ships;
+        }
+
+        /// <summary>
+        /// Collects all cargo from all internal lists.
+        /// </summary>
+        /// <returns>Every existing cargo-object in the harbor-obejct.</returns>
+        public List<Cargo> GetAllCargo()
+        {
+            List<Cargo> cargoList = [];
+            foreach (Warehouse warehouse in Warehouses)
+            {
+                foreach (Cargo cargo in warehouse.Inventory)
+                {
+                    cargoList.Add(cargo);
+                }
+            }
+            foreach (Ship ship in GetAllShips())
+            {
+                foreach (Cargo cargo in ship.Cargohold)
+                {
+                    cargoList.Add(cargo);
+                }
+            }
+
+            return cargoList;
+        }
+
+        /// <summary>
+        /// Retrieves a ship by it's <see cref="Ship.Id"/>.
+        /// </summary>
+        /// <param name="id">The id to find.</param>
+        /// <returns>The ship if it exists, else returns null.</returns>
+        public Ship? GetShipById(int id)
+        {
+            return GetAllShips().FirstOrDefault(ship => ship.Id == id);
+        }
+
+        /// <summary>
+        /// Retrieves a ship by it's <see cref="Ship.Name"/>.
+        /// </summary>
+        /// <param name="name">The name to find.</param>
+        /// <returns>The ship if it exists, else returns null.</returns>
+        public Ship? GetShipByName(string name)
+        {
+            return GetAllShips().FirstOrDefault(ship => ship.Name == name);
+        }
+        
+        /// <summary>
+        /// Retrieves a cargo-object by it's <see cref="Cargo.Id"/>.
+        /// </summary>
+        /// <param name="id">The id to find.</param>
+        /// <returns>The cargo if it exists, else returns null.</returns>
+        public Cargo? GetCargoById(int id)
+        {
+            return GetAllCargo().FirstOrDefault(cargo => cargo.Id == id);
+        }
+
+        /// <summary>
+        /// Retrieves a cargo-object by it's <see cref="Cargo.Name"/>.
+        /// </summary>
+        /// <param name="name">The name to find.</param>
+        /// <returns>The cargo if it exists, else returns null.</returns>
+        public Cargo? GetCargoByName(string name)
+        {
+            return GetAllCargo().FirstOrDefault(cargo => cargo.Name == name);
+        }
+
+
 
 		/// <summary>CLI to configure a harbor.</summary>
 		public void ConfigureHarbor()

@@ -54,10 +54,10 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 			// -----------------
 			Console.WriteLine();
 			Console.WriteLine("Warehouses:");
-			foreach (Warehouse warehouse in harbor.Warehouses)
+			foreach (Warehouse warehouse in harbor.GetWarehouses())
 			{
 				Console.WriteLine($"{warehouse}");
-				foreach (Cargo cargo in warehouse.Inventory)
+				foreach (Cargo cargo in warehouse.GetInventory())
 				{
 					Console.WriteLine($"\t{cargo}");
 				}
@@ -65,12 +65,12 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
 			Console.WriteLine();
 			Console.WriteLine("Ports:");
-			foreach (Port port in harbor.Ports)
+			foreach (Port port in harbor.GetPorts())
 			{
 				Console.WriteLine($"{port}");
 				if (port.OccupyingShip != null)
 				{
-					foreach (Cargo cargo in port.OccupyingShip.Cargohold)
+					foreach (Cargo cargo in port.OccupyingShip.GetCargohold())
 					{
 						Console.WriteLine($"\t{cargo}");
 					}
@@ -79,15 +79,31 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
 			Console.WriteLine();
 			Console.WriteLine("Ships in queue:");
-			Console.WriteLine(string.Join("\n", harbor.WaitingQueue));
+			Console.WriteLine(string.Join("\n", harbor.GetWaitingQueue()));
 
 			Console.WriteLine();
 			Console.WriteLine("Ships sailing:");
-			Console.WriteLine(string.Join("\n", harbor.SailingShips));
+			Console.WriteLine(string.Join("\n", harbor.GetSailingShips()));
 
 
-			// TODO: Lage en metode som retunerner en list med alle skip
-			// TODO: Lage en metode som returnerer en list med alle cargo-objeckter fra alle skip og lagere
+			// Uthenting av historikk for spesifikk et skip
+			Ship? shipToGetHistoryOn = harbor.GetShipByName("Butter");
+			if (shipToGetHistoryOn != null)
+				{
+				Console.WriteLine();
+				Console.WriteLine(shipToGetHistoryOn);
+				foreach (LogEntry logEntry in shipToGetHistoryOn.GetLog())
+					// Filtrerer bort alt med cargo fordi listen blir for lang
+					if (!logEntry.ToString().Contains("cargohold"))
+						Console.WriteLine("\t" + logEntry);
+				}
+
+			// Denne listen blir laaaang
+			//Console.WriteLine();
+			//Cargo? cargoToGetHistoryOn = harbor.GetCargoById(2);
+			//if (cargoToGetHistoryOn != null)
+			//	foreach (LogEntry logEntry in cargoToGetHistoryOn.Log)
+			//		Console.WriteLine("logEntry);
 		}
 	}
 }
