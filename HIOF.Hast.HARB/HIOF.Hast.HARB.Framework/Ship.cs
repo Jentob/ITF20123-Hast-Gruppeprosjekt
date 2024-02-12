@@ -16,14 +16,18 @@ namespace HIOF.Hast.HARB.Framework
 		Daily,
 		Weekly,
 	}
-	/// <summary>LogEntry keeps time and event separated.</summary>
-	public struct LogEntry(DateTime _time, string _message)
+	/// <summary>
+	/// LogEntry is used to keep time and event separated for easy sorting and processing.
+	/// </summary>
+	/// <param name="time">Time of event.</param>
+	/// <param name="message">Event to be logged.</param>
+	public readonly struct LogEntry(DateTime time, string message)
 	{
-		public DateTime time = _time;
-		public string message = _message;
+		public DateTime Time { get; } = time;
+		public string Message { get; } = message;
 		public override readonly string ToString()
         {
-            return $"{time} - {message}";
+            return $"{Time} - {Message}";
         }
     }
 
