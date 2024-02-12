@@ -42,9 +42,9 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 			harbor.AddShip(new("Charlie", ShipSize.Large, 24, start, "Shanghai", 2, RecurringSailing.Weekly));
             harbor.DockShips();
 
-			// -------------------
+			// --------------------
 			// Starter Simulasjonen
-			// -------------------
+			// --------------------
 			Console.WriteLine("Simulation started");
 			Driver.Run(harbor, start, end);
 			Console.WriteLine("Simulation ended");
