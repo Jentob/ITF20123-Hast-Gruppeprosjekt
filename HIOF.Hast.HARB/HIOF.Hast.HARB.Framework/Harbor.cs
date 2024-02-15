@@ -271,7 +271,7 @@ namespace HIOF.Hast.HARB.Framework
                             ship.SailingDate = ((DateTime)ship.SailingDate).AddDays(7);
                             break;
                         default:
-                        throw new Exception();
+                        throw new ShipNotRecurringException("The ship " + ship.Name + ", does not have any recurring values.", ship.Name);
                     };
                     if(SailingShips.Remove(ship))
                         WaitingQueue.Add(ship);
