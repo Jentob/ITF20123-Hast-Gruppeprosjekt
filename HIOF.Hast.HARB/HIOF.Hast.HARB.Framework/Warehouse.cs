@@ -24,7 +24,7 @@ namespace HIOF.Hast.HARB.Framework
             set
             {
                 if (Inventory.Count == 0) _maxCapacity = value;
-                else throw new Exception("Inventory is not empty.");
+                else throw new InventoryNotEmptyException("Inventory is not empty.", Inventory.Count);
             }
         }
         /// <summary>The items stored in the warehouse.</summary>
