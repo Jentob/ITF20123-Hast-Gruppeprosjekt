@@ -169,7 +169,7 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves cargo from ships docked to warehouses.
         /// </summary>
         /// <param name="time">Used for logging.</param>
-        public void OffloadCargoFromShips(DateTime time)
+        internal void OffloadCargoFromShips(DateTime time)
         {
             foreach (Port port in Ports)
             {
@@ -194,7 +194,7 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves cargo from warehouses to ships docked.
         /// </summary>
         /// <param name="time">Used for logging.</param>
-        public void LoadCargoToShips(DateTime time)
+        internal void LoadCargoToShips(DateTime time)
         {
             foreach (Warehouse warehouse in Warehouses)
             {
@@ -228,7 +228,7 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves ships from <see cref="Ports"/> to <see cref="SailingShips"/>.
         /// </summary>
         /// <param name="time">Used to for logging and for figuring out if a ship should leave.</param>
-		public void ReleaseShips(DateTime time)
+		internal void ReleaseShips(DateTime time)
         {
             // TODO: Sjekke om et skip har vært for lenge til kai og flytte det til WaitingQueue
             foreach (Port port in Ports)
@@ -250,7 +250,7 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves ships from <see cref="SailingShips"/> to <see cref="WaitingQueue"/>.
         /// </summary>
         /// <param name="time">Used to for logging and for figuring out if a ship should return.</param>
-		public void QueueShips(DateTime time)
+		internal void QueueShips(DateTime time)
         {
             Ship[] shipsToQueue = [.. SailingShips];
             foreach (Ship ship in shipsToQueue)
