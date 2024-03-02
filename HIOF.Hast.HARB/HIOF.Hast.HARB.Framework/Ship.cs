@@ -2,8 +2,8 @@
 
 namespace HIOF.Hast.HARB.Framework
 {
-	/// <summary>Represents an arbritary ship size.</summary>
-	public enum ShipSize
+    /// <summary>Represents an arbritary ship size.</summary>
+    public enum ShipSize
 	{
 		Small,
 		Medium,
@@ -37,7 +37,7 @@ namespace HIOF.Hast.HARB.Framework
     /// <param name="maxCargoWeightInTons">Represents max cargo weight the ship is able to handle.</param>
     public class Ship(string name, ShipSize size, double maxCargoWeightInTons, DateTime? sailingDate = null, string destination = "UNKNOWN", int triplength = 1, RecurringSailing recurringSailing = RecurringSailing.Weekly)
 	{
-		private static int idCount = 0;
+        private static int idCount = 0;
 		public int Id { get; } =idCount++;
 		public string Name { get; set; } = name;
 		public ShipSize Size { get; } = size;

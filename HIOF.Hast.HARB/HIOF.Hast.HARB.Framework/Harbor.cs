@@ -5,7 +5,7 @@ namespace HIOF.Hast.HARB.Framework
     /// <summary>Represents a harbor</summary>
     public class Harbor(string name)
     {
-		private static int idCount = 0;
+        private static int idCount = 0;
 		public int Id { get; } = idCount++;
 		public string Name { get; set; } = name;
         internal List<Ship> WaitingQueue { get; } = [];
@@ -130,7 +130,9 @@ namespace HIOF.Hast.HARB.Framework
 					{
 						port.OccupyPort(ship);
                         WaitingQueue.Remove(ship);
-						if (!ArePortsAvailable())
+                        // Raise ShipArrived event when a ship arrives
+                        OnShipArrived(new ShipEventArgs(ship));
+                        if (!ArePortsAvailable())
 							return;
 						break;
 					}
@@ -157,7 +159,9 @@ namespace HIOF.Hast.HARB.Framework
 					{
 						port.OccupyPort(ship, time);
                         WaitingQueue.Remove(ship);
-						if (!ArePortsAvailable())
+                        // Raise ShipArrived event when a ship arrives
+                        OnShipArrived(new ShipEventArgs(ship));
+                        if (!ArePortsAvailable())
 							return;
 						break;
 					}
@@ -228,7 +232,7 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves ships from <see cref="Ports"/> to <see cref="SailingShips"/>.
         /// </summary>
         /// <param name="time">Used to for logging and for figuring out if a ship should leave.</param>
-		internal void ReleaseShips(DateTime time)
+        internal void ReleaseShips(DateTime time)
         {
             // TODO: Sjekke om et skip har vært for lenge til kai og flytte det til WaitingQueue
             foreach (Port port in Ports)
@@ -242,16 +246,20 @@ namespace HIOF.Hast.HARB.Framework
                         continue;
                     leavingShip.RecordHistory(new(time, $"Sailing to {leavingShip.Destination}"));
                     SailingShips.Add(leavingShip);
+
+                    // Raise the ShipSailed event
+                    OnShipSailed(new ShipEventArgs(leavingShip));
                 }
             }
         }
+
 
         /// <summary>
         /// Moves ships from <see cref="SailingShips"/> to <see cref="WaitingQueue"/>.
         /// </summary>
         /// <param name="time">Used to for logging and for figuring out if a ship should return.</param>
-		internal void QueueShips(DateTime time)
-        {
+        internal void QueueShips(DateTime time) 
+            {
             Ship[] shipsToQueue = [.. SailingShips];
             foreach (Ship ship in shipsToQueue)
             {
@@ -275,6 +283,7 @@ namespace HIOF.Hast.HARB.Framework
                     };
                     if(SailingShips.Remove(ship))
                         WaitingQueue.Add(ship);
+                        
                 }
             }
         }
@@ -368,5 +377,35 @@ namespace HIOF.Hast.HARB.Framework
 		{
 			return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
 		}
-	}
+
+        // EVENTS
+        public class ShipEventArgs : EventArgs
+        {
+            public Ship Ship { get; }
+
+            public ShipEventArgs(Ship ship)
+            {
+                Ship = ship;
+            }
+        }
+
+        /// <summary>
+        /// Handling of ship sailing and arrival events
+        ///</summary>
+        public delegate void ShipSailingHandler(object source, ShipEventArgs e);
+
+        // Events for Sailing and arrival
+        public event ShipSailingHandler ShipSailing;
+        public event ShipSailingHandler ShipArrived;
+
+        protected virtual void OnShipSailed(ShipEventArgs e)
+        {
+            ShipSailing?.Invoke(this, e);
+        }
+
+        protected virtual void OnShipArrived(ShipEventArgs e)
+        {
+            ShipArrived?.Invoke(this, e);
+        }
+    }
 }

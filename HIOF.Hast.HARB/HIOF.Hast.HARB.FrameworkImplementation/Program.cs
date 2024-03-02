@@ -10,11 +10,12 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             Harbor harbor = new("Harbor 1");
 
             DateTime start = new(2024, 01, 01);
-            DateTime end = new(2024, 04, 01);
+            DateTime end = new(2024, 03, 01);
 
-			// -----------------
-			// Oppsett av havnen
-			// -----------------
+
+            // -----------------
+            // Oppsett av havnen
+            // -----------------
             harbor.AddWarehouse(new("Large warehouse", 20));
 			harbor.AddWarehouse(new("Small warehouse", 10));
 
@@ -42,10 +43,14 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 			harbor.AddShip(new("Charlie", ShipSize.Large, 24, start, "Shanghai", 2, RecurringSailing.Weekly));
             harbor.DockShips();
 
-			// --------------------
-			// Starter Simulasjonen
-			// --------------------
-			Console.WriteLine("Simulation started");
+			// events
+            harbor.ShipSailing += Harbor_ShipSailed;
+            harbor.ShipArrived += Harbor_ShipArrived;
+
+            // --------------------
+            // Starter Simulasjonen
+            // --------------------
+            Console.WriteLine("Simulation started");
 			Driver.Run(harbor, start, end);
 			Console.WriteLine("Simulation ended");
 
@@ -89,21 +94,37 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 			// Uthenting av historikk for spesifikk et skip
 			Ship? shipToGetHistoryOn = harbor.GetShipByName("Butter");
 			if (shipToGetHistoryOn != null)
-				{
+			{
 				Console.WriteLine();
 				Console.WriteLine(shipToGetHistoryOn);
 				foreach (LogEntry logEntry in shipToGetHistoryOn.GetLog())
 					// Filtrerer bort alt med cargo fordi listen blir for lang
 					if (!logEntry.ToString().Contains("cargohold"))
 						Console.WriteLine("\t" + logEntry);
-				}
+			}
+            // Denne listen blir laaaang
+            //Console.WriteLine();
+            //Cargo? cargoToGetHistoryOn = harbor.GetCargoById(2);
+            //if (cargoToGetHistoryOn != null)
+            //	foreach (LogEntry logEntry in cargoToGetHistoryOn.Log)
+            //		Console.WriteLine("logEntry);
 
-			// Denne listen blir laaaang
-			//Console.WriteLine();
-			//Cargo? cargoToGetHistoryOn = harbor.GetCargoById(2);
-			//if (cargoToGetHistoryOn != null)
-			//	foreach (LogEntry logEntry in cargoToGetHistoryOn.Log)
-			//		Console.WriteLine("logEntry);
-		}
-	}
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
+
+        }
+
+        // Sailing events 
+        private static void Harbor_ShipSailed(object source, Harbor.ShipEventArgs e)
+        {
+            // Print a message when a ship sails from port
+            Console.WriteLine($"Ship {e.Ship.Name} has sailed from the port in {e.Ship.Destination}");
+        }
+        private static void Harbor_ShipArrived(object source, Harbor.ShipEventArgs e)
+        {
+            // Print a message when a ship arrives
+            Console.WriteLine($"Ship {e.Ship.Name} arrived at port in {e.Ship.Destination}");
+        }
+
+    }
 }
