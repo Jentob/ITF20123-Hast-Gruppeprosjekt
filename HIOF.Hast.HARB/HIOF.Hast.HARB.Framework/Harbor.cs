@@ -6,8 +6,8 @@ namespace HIOF.Hast.HARB.Framework
     public class Harbor(string name)
     {
         private static int idCount = 0;
-		public int Id { get; } = idCount++;
-		public string Name { get; set; } = name;
+        public int Id { get; } = idCount++;
+        public string Name { get; set; } = name;
         internal List<Ship> WaitingQueue { get; } = [];
         internal List<Ship> SailingShips { get; } = [];
         internal List<Warehouse> Warehouses { get; } = [];
@@ -18,36 +18,36 @@ namespace HIOF.Hast.HARB.Framework
         /// </summary>
         /// <returns>A list of the queue.</returns>
         public IList<Ship> GetWaitingQueue()
-		{
-			return [.. WaitingQueue];
-		}
+        {
+            return [.. WaitingQueue];
+        }
 
         /// <summary>
         /// Retrieves a copy of ships sailing.
         /// </summary>
         /// <returns>A collection of ships sailing.</returns>
         public Collection<Ship> GetSailingShips()
-		{
-			return [.. SailingShips];
-		}
+        {
+            return [.. SailingShips];
+        }
 
         /// <summary>
         /// Retrieves a copy of warehouses.
         /// </summary>
         /// <returns>A collection of the warehouses.</returns>
         public Collection<Warehouse> GetWarehouses()
-		{
-			return [.. Warehouses];
-		}
+        {
+            return [.. Warehouses];
+        }
 
         /// <summary>
         /// Retrieves a copy of ports.
         /// </summary>
         /// <returns>A collection of the ports.</returns>
         public Collection<Port> GetPorts()
-		{
-			return [.. Ports];
-		}
+        {
+            return [.. Ports];
+        }
 
         /// <summary>
         /// Used when setting up the harbor to add a warehouse.
@@ -62,11 +62,11 @@ namespace HIOF.Hast.HARB.Framework
         /// Used when setting up the harbor to add a port.
         /// </summary>
         /// <param name="port">The port to be added to <see cref="Ports"/>.</param>
-		public void AddPort(Port port)
-		{
-			Ports.Add(port);
+        public void AddPort(Port port)
+        {
+            Ports.Add(port);
             Ports.Sort((p1, p2) => p1.Size.CompareTo(p2.Size));
-		}
+        }
         
         /// <summary>
         /// Used when setting up the harbor to add a ship.
@@ -88,9 +88,9 @@ namespace HIOF.Hast.HARB.Framework
             {
                 foreach (Ship ship in WaitingQueue)
                 {
-					if (port.OccupyingShip == null && port.Size >= ship.Size)
-						return true;
-				}
+                    if (port.OccupyingShip == null && port.Size >= ship.Size)
+                        return true;
+                }
             }
             return false;
         }
@@ -115,30 +115,30 @@ namespace HIOF.Hast.HARB.Framework
         /// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
         /// </summary>
         // TODO: Optimaliser
-		public void DockShips()
+        public void DockShips()
         {
-			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
-				return;
+            if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+                return;
 
-			Ship[] shipsToDock = [.. WaitingQueue]; 
+            Ship[] shipsToDock = [.. WaitingQueue]; 
 
-			foreach (Ship ship in shipsToDock)
-			{
-				foreach (Port port in Ports)
-				{
-					if (port.OccupyingShip == null && port.Size >= ship.Size)
-					{
-						port.OccupyPort(ship);
+            foreach (Ship ship in shipsToDock)
+            {
+                foreach (Port port in Ports)
+                {
+                    if (port.OccupyingShip == null && port.Size >= ship.Size)
+                    {
+                        port.OccupyPort(ship);
                         WaitingQueue.Remove(ship);
                         // Raise ShipArrived event when a ship arrives
                         OnShipArrived(new ShipEventArgs(ship));
                         if (!ArePortsAvailable())
-							return;
-						break;
-					}
-				}
-			}
-		}
+                            return;
+                        break;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Works the same as <see cref="DockShips() "/> but also logs.
@@ -146,28 +146,28 @@ namespace HIOF.Hast.HARB.Framework
         /// <param name="time">Used for logging.</param>
         internal void DockShips(DateTime time)
         {
-			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
-				return;
+            if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+                return;
 
-			Ship[] shipsToDock = [.. WaitingQueue]; 
+            Ship[] shipsToDock = [.. WaitingQueue]; 
 
-			foreach (Ship ship in shipsToDock)
-			{
-				foreach (Port port in Ports)
-				{
-					if (port.OccupyingShip == null && port.Size >= ship.Size)
-					{
-						port.OccupyPort(ship, time);
+            foreach (Ship ship in shipsToDock)
+            {
+                foreach (Port port in Ports)
+                {
+                    if (port.OccupyingShip == null && port.Size >= ship.Size)
+                    {
+                        port.OccupyPort(ship, time);
                         WaitingQueue.Remove(ship);
                         // Raise ShipArrived event when a ship arrives
                         OnShipArrived(new ShipEventArgs(ship));
                         if (!ArePortsAvailable())
-							return;
-						break;
-					}
-				}
-			}
-		}
+                            return;
+                        break;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Moves cargo from ships docked to warehouses.
@@ -373,10 +373,10 @@ namespace HIOF.Hast.HARB.Framework
             return GetAllCargo().FirstOrDefault(cargo => cargo.Name == name);
         }
 
-		public override string ToString()
-		{
-			return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
-		}
+        public override string ToString()
+        {
+            return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
+        }
 
         // EVENTS
         public class ShipEventArgs : EventArgs
