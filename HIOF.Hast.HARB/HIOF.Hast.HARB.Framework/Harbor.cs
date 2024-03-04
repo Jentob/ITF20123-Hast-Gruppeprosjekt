@@ -26,12 +26,12 @@ namespace HIOF.Hast.HARB.Framework
         /// <summary>
         /// Event raises when a ship loads cargo.
         /// </summary>
-        public event EventHandler<ShipLoadingCargoEventArgs> CargoLoaded;
+        public event EventHandler<ShipLoadingCargoEventArgs>? CargoLoaded;
 
         /// <summary>
         /// Event raises when a ship unloads cargo.
         /// </summary>
-        public event EventHandler<ShipOffloadingCargoEventArgs> CargoOffloaded;
+        public event EventHandler<ShipOffloadingCargoEventArgs>? CargoOffloaded;
 
         /// <summary>
         /// Retrieves a copy of ships waiting to dock.
