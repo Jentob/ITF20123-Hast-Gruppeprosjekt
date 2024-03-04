@@ -2,18 +2,18 @@
 {
     public class SimulationDriver
     {
-		// Sailing events 
-		private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
-		{
-			Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
-		}
+        // Sailing events 
+        private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
+        {
+            Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
+        }
 
-		private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
-		{
-			// Print a message when a ship arrives
-			Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
-		}
-        /*
+        private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
+        {
+            // Print a message when a ship arrives
+            Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
+        }
+
         // Cargo loading events
         private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
         {
@@ -23,7 +23,7 @@
         private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
         {
             Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
-        }*/
+        }
 
         /// <summary>
         /// Runs the simulation.
@@ -33,11 +33,11 @@
         /// <param name="endTime">The date the simulation ends.</param>
         public static void Run(Harbor harbor, DateTime startTime, DateTime endTime)
         {
-			// events
-			// harbor.ShipSailing += Harbor_ShipSailed;
-			// harbor.ShipArrived += Harbor_ShipArrived;
+            // events
+            // harbor.ShipSailing += Harbor_ShipSailed;
+            // harbor.ShipArrived += Harbor_ShipArrived;
 
-			DateTime time = startTime;
+            DateTime time = startTime;
             while (time < endTime)
             {
                 Update(harbor, time);

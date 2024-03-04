@@ -1,12 +1,7 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    public class ShipSailingEventArgs : EventArgs
+    public class ShipSailingEventArgs(Ship shipSailing) : EventArgs
     {
-        public ShipSailingEventArgs (Ship shipSailing)
-        {
-            ShipSailing = shipSailing;
-        }
-
-        public Ship ShipSailing { get; private set; }
+        public Ship ShipSailing { get; private set; } = shipSailing;
     }
 }

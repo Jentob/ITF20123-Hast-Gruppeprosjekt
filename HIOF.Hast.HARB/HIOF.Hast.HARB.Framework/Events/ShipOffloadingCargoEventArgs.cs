@@ -1,12 +1,7 @@
-namespace HIOF.Hast.HARB.Framework.Events
+namespace HIOF.Hast.HARB.Framework
 {
-    public class ShipOffloadingCargoEventArgs : EventArgs
+    public class ShipOffloadingCargoEventArgs(Cargo cargoOffloaded) : EventArgs
     {
-        public ShipOffloadingCargoEventArgs(Cargo cargoOffloaded)
-        {
-            CargoOffloaded = cargoOffloaded;
-        }
-
-        public Cargo CargoOffloaded { get; private set; }
+        public Cargo CargoOffloaded { get; private set; } = cargoOffloaded;
     }
 }
