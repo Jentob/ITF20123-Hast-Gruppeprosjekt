@@ -1,4 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using HIOF.Hast.HARB.Framework;
+using HIOF.Hast.HARB.Framework.Events;
+
+
 
 namespace HIOF.Hast.HARB.Framework
 {
@@ -12,6 +16,15 @@ namespace HIOF.Hast.HARB.Framework
         internal List<Ship> SailingShips { get; } = [];
         internal List<Warehouse> Warehouses { get; } = [];
         internal List<Port> Ports { get; } = [];
+
+        /// <summary>
+        /// Event raises when a ship sails from port-
+        /// </summary>
+        public event EventHandler<ShipSailingEventArgs> ShipSailing;
+        /// <summary>
+        /// Event raises when a ship arrives at a port.
+        /// </summary>
+        public event EventHandler<ShipArrivedEventArgs> ShipArrived;
 
         /// <summary>
         /// Retrieves a copy of ships waiting to dock.
@@ -130,8 +143,8 @@ namespace HIOF.Hast.HARB.Framework
                     {
                         port.OccupyPort(ship);
                         WaitingQueue.Remove(ship);
-                        // Raise ShipArrived event when a ship arrives
-                        OnShipArrived(new ShipEventArgs(ship));
+                        // Raise ShipArrived event when a ship arrives.
+                        RaiseShipArrived(ship);
                         if (!ArePortsAvailable())
                             return;
                         break;
@@ -159,8 +172,8 @@ namespace HIOF.Hast.HARB.Framework
                     {
                         port.OccupyPort(ship, time);
                         WaitingQueue.Remove(ship);
-                        // Raise ShipArrived event when a ship arrives
-                        OnShipArrived(new ShipEventArgs(ship));
+                        // Raise ShipArrived event when a ship arrives.
+                        RaiseShipArrived(ship);
                         if (!ArePortsAvailable())
                             return;
                         break;
@@ -247,8 +260,8 @@ namespace HIOF.Hast.HARB.Framework
                     leavingShip.RecordHistory(new(time, $"Sailing to {leavingShip.Destination}"));
                     SailingShips.Add(leavingShip);
 
-                    // Raise the ShipSailed event
-                    OnShipSailed(new ShipEventArgs(leavingShip));
+                    // Raise the event for sailing
+                    RaiseShipSailed(leavingShip);
                 }
             }
         }
@@ -378,26 +391,23 @@ namespace HIOF.Hast.HARB.Framework
             return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
         }
 
-
         // EVENTS
-
         /// <summary>
-        /// Handling of ship sailing and arrival events
-        ///</summary>
-        public delegate void ShipSailingHandler(object source, ShipEventArgs e);
-
-        // Events for Sailing and arrival
-        public event ShipSailingHandler ShipSailing;
-        public event ShipSailingHandler ShipArrived;
-
-        protected virtual void OnShipSailed(ShipEventArgs e)
+        /// Raised ShipSailing event."/>.
+        /// </summary>
+        /// <param name="shipSailing">The ship that has sailed.</param>
+        internal void RaiseShipSailed(Ship shipSailing)
         {
-            ShipSailing?.Invoke(this, e);
+            ShipSailing?.Invoke(this, new ShipSailingEventArgs(shipSailing));
         }
 
-        protected virtual void OnShipArrived(ShipEventArgs e)
+        /// <summary>
+        /// Raised ShipArrived event."/>.
+        /// </summary>
+        /// <param name="shipArrived">The ship arriving at port.</param>
+        internal void RaiseShipArrived(Ship shipArrived)
         {
-            ShipArrived?.Invoke(this, e);
+            ShipArrived?.Invoke(this, new ShipArrivedEventArgs(shipArrived));
         }
     }
 }
