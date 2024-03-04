@@ -1,18 +1,20 @@
-﻿namespace HIOF.Hast.HARB.Framework
+﻿using HIOF.Hast.HARB.Framework.Events;
+
+namespace HIOF.Hast.HARB.Framework
 {
-    public class Driver
+    public class SimulationDriver
     {
 		// Sailing events 
-		// private static void Harbor_ShipSailed(object source, ShipEventArgs e)
-		// {
-		// // Print a message when a ship sails from port
-		//     Console.WriteLine($"Ship {e.Ship.Name} has sailed from the port in {e.Ship.Destination}");
-		// }
-		// private static void Harbor_ShipArrived(object source, ShipEventArgs e)
-		// {
-		// // Print a message when a ship arrives
-		//     Console.WriteLine($"Ship {e.Ship.Name} arrived at port in {e.Ship.Destination}");
-		// }
+		private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
+		{
+			Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
+		}
+
+		private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
+		{
+			// Print a message when a ship arrives
+			Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
+		}
 
 		/// <summary>
 		/// Runs the simulation.

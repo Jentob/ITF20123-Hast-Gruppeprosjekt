@@ -1,23 +1,10 @@
 ﻿using System.Net.Sockets;
 using HIOF.Hast.HARB.Framework;
-using HIOF.Hast.HARB.Framework.Events;
 
 namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
-        // Sailing events 
-        private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
-        {
-            Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
-        }
-        
-        private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
-        {
-            // Print a message when a ship arrives
-            Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
-        }
-
         static void Main(string[] args)
         {
             Harbor harbor = new("Harbor 1");
@@ -55,10 +42,6 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             harbor.AddShip(new("Butter", ShipSize.Medium, 10, start.AddDays(2), "Antwerp"));
             harbor.AddShip(new("Charlie", ShipSize.Large, 24, start, "Shanghai", 2, RecurringSailing.Weekly));
             harbor.DockShips();
-
-            // events
-            harbor.ShipSailing += Harbor_ShipSailed;
-            harbor.ShipArrived += Harbor_ShipArrived;
 
             // --------------------
             // Starter Simulasjonen
