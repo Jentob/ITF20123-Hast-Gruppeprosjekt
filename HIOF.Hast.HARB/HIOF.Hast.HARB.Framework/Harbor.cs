@@ -244,6 +244,7 @@ namespace HIOF.Hast.HARB.Framework
                     // LeavePort() vil ikke returnere null her
                     if (leavingShip == null)
                         continue;
+                    leavingShip.SailingDate = time;
                     leavingShip.RecordHistory(new(time, $"Sailing to {leavingShip.Destination}"));
                     SailingShips.Add(leavingShip);
 

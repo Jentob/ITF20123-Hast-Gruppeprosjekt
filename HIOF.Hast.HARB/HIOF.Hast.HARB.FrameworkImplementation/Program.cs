@@ -5,18 +5,6 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
-        // Sailing events 
-     // private static void Harbor_ShipSailed(object source, ShipEventArgs e)
-     // {
-     // // Print a message when a ship sails from port
-     //     Console.WriteLine($"Ship {e.Ship.Name} has sailed from the port in {e.Ship.Destination}");
-     // }
-     // private static void Harbor_ShipArrived(object source, ShipEventArgs e)
-     // {
-     // // Print a message when a ship arrives
-     //     Console.WriteLine($"Ship {e.Ship.Name} arrived at port in {e.Ship.Destination}");
-     // }
-
         static void Main(string[] args)
         {
             Harbor harbor = new("Harbor 1");
@@ -55,15 +43,11 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             harbor.AddShip(new("Charlie", ShipSize.Large, 24, start, "Shanghai", 2, RecurringSailing.Weekly));
             harbor.DockShips();
 
-            // events
-         // harbor.ShipSailing += Harbor_ShipSailed;
-         // harbor.ShipArrived += Harbor_ShipArrived;
-
             // --------------------
             // Starter Simulasjonen
             // --------------------
             Console.WriteLine("Simulation started");
-            Driver.Run(harbor, start, end);
+            SimulationDriver.Run(harbor, start, end);
             Console.WriteLine("Simulation ended");
 
             // -----------------
