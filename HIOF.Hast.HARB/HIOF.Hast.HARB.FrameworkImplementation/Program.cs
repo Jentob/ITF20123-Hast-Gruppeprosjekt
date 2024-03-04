@@ -108,7 +108,7 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
 
-            
+        
         }
     }
 }

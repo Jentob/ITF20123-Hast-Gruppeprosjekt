@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using HIOF.Hast.HARB.Framework;
+using HIOF.Hast.HARB.Framework.Events;
+
 
 namespace HIOF.Hast.HARB.Framework
 {
@@ -23,6 +25,16 @@ namespace HIOF.Hast.HARB.Framework
         /// Event raises when a ship arrives at a port.
         /// </summary>
         public event EventHandler<ShipArrivedEventArgs>? ShipArrived;
+
+        /// <summary>
+        /// Event raises when a ship loads cargo.
+        /// </summary>
+        public event EventHandler<ShipLoadingCargoEventArgs> CargoLoaded;
+
+        /// <summary>
+        /// Event raises when a ship unloads cargo.
+        /// </summary>
+        public event EventHandler<ShipOffloadingCargoEventArgs> CargoOffloaded;
 
         /// <summary>
         /// Retrieves a copy of ships waiting to dock.
@@ -198,6 +210,7 @@ namespace HIOF.Hast.HARB.Framework
                     foreach (Cargo cargo in port.OccupyingShip.Cargohold)
                     {
                         Cargo? c = port.OccupyingShip.RemoveCargo(cargo, time);
+                        RaiseCargoOffloaded(cargo);
                         if (c != null && !warehouse.AddCargo(c, time))
                             break;
                     }
@@ -227,6 +240,7 @@ namespace HIOF.Hast.HARB.Framework
                         if (port.OccupyingShip.AddCargo(cargo, time))
                         {
                             isFull = false;
+                            RaiseCargoLoaded(cargo);
                             break;
                         }
                     }
@@ -407,6 +421,24 @@ namespace HIOF.Hast.HARB.Framework
         internal void RaiseShipArrived(Ship shipArrived)
         {
             ShipArrived?.Invoke(this, new ShipArrivedEventArgs(shipArrived));
+        }
+
+        /// <summary>
+        /// Raised CargoLoaded event."/>.
+        /// </summary>
+        /// <param name="cargoLoaded"> Cargo loaded to ship.</param>
+        internal void RaiseCargoLoaded(Cargo cargoLoaded)
+        {
+            CargoLoaded?.Invoke(this, new ShipLoadingCargoEventArgs(cargoLoaded));
+        }
+
+        /// <summary>
+        /// Raised CargoOffloaded event."/>.
+        /// </summary>
+        /// <param name="shipArrived">Cargo offloaded from ship.</param>
+        internal void RaiseCargoOffloaded(Cargo cargoOffloaded)
+        {
+            CargoOffloaded?.Invoke(this, new ShipOffloadingCargoEventArgs(cargoOffloaded));
         }
     }
 }

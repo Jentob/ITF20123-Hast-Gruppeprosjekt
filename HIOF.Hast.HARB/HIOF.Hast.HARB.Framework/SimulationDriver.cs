@@ -13,14 +13,25 @@
 			// Print a message when a ship arrives
 			Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
 		}
+        /*
+        // Cargo loading events
+        private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
+        {
+            Console.WriteLine($"Cargo {e.CargoLoaded} loading onto ship.");
+        }
 
-		/// <summary>
-		/// Runs the simulation.
-		/// </summary>
-		/// <param name="harbor">A harbor object to run the simulation on.</param>
-		/// <param name="startTime">The date the simulation starts.</param>
-		/// <param name="endTime">The date the simulation ends.</param>
-		public static void Run(Harbor harbor, DateTime startTime, DateTime endTime)
+        private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
+        {
+            Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
+        }*/
+
+        /// <summary>
+        /// Runs the simulation.
+        /// </summary>
+        /// <param name="harbor">A harbor object to run the simulation on.</param>
+        /// <param name="startTime">The date the simulation starts.</param>
+        /// <param name="endTime">The date the simulation ends.</param>
+        public static void Run(Harbor harbor, DateTime startTime, DateTime endTime)
         {
 			// events
 			// harbor.ShipSailing += Harbor_ShipSailed;
