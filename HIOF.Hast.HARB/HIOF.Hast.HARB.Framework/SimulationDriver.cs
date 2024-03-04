@@ -1,6 +1,4 @@
-﻿using HIOF.Hast.HARB.Framework.Events;
-
-namespace HIOF.Hast.HARB.Framework
+﻿namespace HIOF.Hast.HARB.Framework
 {
     public class SimulationDriver
     {

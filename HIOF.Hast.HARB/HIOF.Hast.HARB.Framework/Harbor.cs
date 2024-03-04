@@ -1,8 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using HIOF.Hast.HARB.Framework;
-using HIOF.Hast.HARB.Framework.Events;
-
-
 
 namespace HIOF.Hast.HARB.Framework
 {
@@ -18,13 +15,14 @@ namespace HIOF.Hast.HARB.Framework
         internal List<Port> Ports { get; } = [];
 
         /// <summary>
-        /// Event raises when a ship sails from port-
+        /// Event raises when a ship sails from a port.
         /// </summary>
-        public event EventHandler<ShipSailingEventArgs> ShipSailing;
+        public event EventHandler<ShipSailingEventArgs>? ShipSailing;
+
         /// <summary>
         /// Event raises when a ship arrives at a port.
         /// </summary>
-        public event EventHandler<ShipArrivedEventArgs> ShipArrived;
+        public event EventHandler<ShipArrivedEventArgs>? ShipArrived;
 
         /// <summary>
         /// Retrieves a copy of ships waiting to dock.
@@ -293,7 +291,7 @@ namespace HIOF.Hast.HARB.Framework
                             ship.SailingDate = ((DateTime)ship.SailingDate).AddDays(7);
                             break;
                         default:
-                        throw new ShipNotRecurringException("The ship " + ship.Name + ", does not have any recurring values.", ship.Name);
+                        throw new ShipNoRecurringException("The ship " + ship + ", does not have a recurring value.");
                     };
                     if(SailingShips.Remove(ship))
                         WaitingQueue.Add(ship);
