@@ -378,8 +378,8 @@ namespace HIOF.Hast.HARB.Framework
             return $"Harbor - {Name}({Id}) - Holds {Warehouses.Count} warehouses, {Ports.Count} ports";
         }
 
+
         // EVENTS
-        
 
         /// <summary>
         /// Handling of ship sailing and arrival events

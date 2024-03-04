@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
-	public class ShipEventArgs(Ship ship) : EventArgs
-	{
-		public Ship Ship { get; } = ship;
-	}
+    public class ShipEventArgs(Ship ship) : EventArgs
+    {
+        public Ship Ship { get; } = ship;
+    }
 }
