@@ -5,7 +5,19 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
-        static void Main(string[] args)
+		// Sailing events 
+		//        private static void Harbor_ShipSailed(object source, ShipEventArgs e)
+		//        {
+		//            // Print a message when a ship sails from port
+		//            Console.WriteLine($"Ship {e.Ship.Name} has sailed from the port in {e.Ship.Destination}");
+		//        }
+		//        private static void Harbor_ShipArrived(object source, ShipEventArgs e)
+		//        {
+		//            // Print a message when a ship arrives
+		//            Console.WriteLine($"Ship {e.Ship.Name} arrived at port in {e.Ship.Destination}");
+		//        }
+
+		static void Main(string[] args)
         {
             Harbor harbor = new("Harbor 1");
 
@@ -44,8 +56,8 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             harbor.DockShips();
 
             // events
-            harbor.ShipSailing += Harbor_ShipSailed;
-            harbor.ShipArrived += Harbor_ShipArrived;
+//            harbor.ShipSailing += Harbor_ShipSailed;
+//            harbor.ShipArrived += Harbor_ShipArrived;
 
             // --------------------
             // Starter Simulasjonen
@@ -113,18 +125,5 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             Console.ReadKey();
 
         }
-
-        // Sailing events 
-        private static void Harbor_ShipSailed(object source, Harbor.ShipEventArgs e)
-        {
-            // Print a message when a ship sails from port
-            Console.WriteLine($"Ship {e.Ship.Name} has sailed from the port in {e.Ship.Destination}");
-        }
-        private static void Harbor_ShipArrived(object source, Harbor.ShipEventArgs e)
-        {
-            // Print a message when a ship arrives
-            Console.WriteLine($"Ship {e.Ship.Name} arrived at port in {e.Ship.Destination}");
-        }
-
     }
 }

@@ -2,20 +2,6 @@
 
 namespace HIOF.Hast.HARB.Framework
 {
-    /// <summary>Represents an arbritary ship size.</summary>
-    public enum ShipSize
-    {
-        Small,
-        Medium,
-        Large,
-    }
-    /// <summary>Indicates if a sailing is recurring.</summary>
-    public enum RecurringSailing
-    {
-        None,
-        Daily,
-        Weekly,
-    }
     /// <summary>
     /// LogEntry is used to keep time and event separated for easy sorting and processing.
     /// </summary>

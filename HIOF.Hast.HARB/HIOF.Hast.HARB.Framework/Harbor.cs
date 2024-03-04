@@ -379,15 +379,7 @@ namespace HIOF.Hast.HARB.Framework
         }
 
         // EVENTS
-        public class ShipEventArgs : EventArgs
-        {
-            public Ship Ship { get; }
-
-            public ShipEventArgs(Ship ship)
-            {
-                Ship = ship;
-            }
-        }
+        
 
         /// <summary>
         /// Handling of ship sailing and arrival events
