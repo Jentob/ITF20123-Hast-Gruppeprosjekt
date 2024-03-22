@@ -39,11 +39,12 @@ namespace HIOF.Hast.HARB.Framework
             return [.. Cargohold];
         }
 
-        /// <summary>
-        /// Caclulates the total weight of the cargo onboard.
-        /// </summary>
-        /// <returns>The total weight.</returns>
-        public double CargoWeight() {
+		/// <summary>
+		/// Caclulates the total weight of the cargo onboard.
+		/// </summary>
+		/// <returns>The total weight.</returns>
+		public double CargoWeight()
+		{
             double weight = 0;
             foreach (Cargo item in Cargohold)
                 weight += item.WeightInTons;
@@ -63,6 +64,21 @@ namespace HIOF.Hast.HARB.Framework
             return false;
         }
 
+		private bool AddCargo(Cargo cargo, DateTime? time)
+		{
+			if (!CargoCheck(cargo))
+				return false;
+			if (time != null)
+			{
+				cargo.RecordHistory(new((DateTime)time, $"Added to ship {Name}({Id})"));
+				RecordHistory(new((DateTime)time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
+			}
+
+			Cargohold.Add(cargo);
+
+			return true;
+		}
+
         /// <summary>
         /// Adds cargo to the <see cref="Cargohold"/>.
         /// </summary>
@@ -70,14 +86,8 @@ namespace HIOF.Hast.HARB.Framework
         /// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
         internal bool AddCargo(Cargo cargo)
         {
-            if (!CargoCheck(cargo))
-                return false;
-
-            Cargohold.Add(cargo);
-
-            return true;
+            return AddCargo(cargo, null);
         }
-
         /// <summary>
         /// Works the same as <see cref="AddCargo(Cargo)"/> but also logs.
         /// </summary>
@@ -86,28 +96,31 @@ namespace HIOF.Hast.HARB.Framework
         /// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
         internal bool AddCargo(Cargo cargo, DateTime time)
         {
-            if (!CargoCheck(cargo))
-                return false;
-
-            cargo.RecordHistory(new(time, $"Added to ship {Name}({Id})"));
-            RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
-
-            Cargohold.Add(cargo);
-
-            return true;
+            return AddCargo(cargo, (DateTime?) time);
         }
 
-        /// <summary>
-        /// Removes cargo from the <see cref="Cargohold"/>.
-        /// </summary>
-        /// <param name="cargo">The cargo to be removed.</param>
-        /// <returns>The cargo on success. null on fail.</returns>
-        internal Cargo? RemoveCargo(Cargo cargo)
+		private Cargo? RemoveCargo(Cargo cargo, DateTime? time)
         {
-            if (!Cargohold.Contains(cargo)) return null;
-            Cargohold.Remove(cargo);
+			if (!Cargohold.Contains(cargo)) return null;
+			Cargohold.Remove(cargo);
 
-            return cargo;
+            if (time != null)
+            {
+			    RecordHistory(new((DateTime) time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
+			    cargo.RecordHistory(new((DateTime) time, $"Removed from ship {Name}({Id})"));
+            }
+
+			return cargo;
+		}
+
+		/// <summary>
+		/// Removes cargo from the <see cref="Cargohold"/>.
+		/// </summary>
+		/// <param name="cargo">The cargo to be removed.</param>
+		/// <returns>The cargo on success. null on fail.</returns>
+		internal Cargo? RemoveCargo(Cargo cargo)
+        {
+            return RemoveCargo(cargo, null);
         }
 
         /// <summary>
@@ -118,13 +131,7 @@ namespace HIOF.Hast.HARB.Framework
         /// <returns>The cargo on success. null on fail.</returns>
         internal Cargo? RemoveCargo(Cargo cargo, DateTime time)
         {
-            if (!Cargohold.Contains(cargo)) return null;
-            Cargohold.Remove(cargo);
-
-            RecordHistory(new(time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
-            cargo.RecordHistory(new(time, $"Removed from ship {Name}({Id})"));
-
-            return cargo;
+            return RemoveCargo(cargo, (DateTime?)time);
         }
 
         /// <summary>

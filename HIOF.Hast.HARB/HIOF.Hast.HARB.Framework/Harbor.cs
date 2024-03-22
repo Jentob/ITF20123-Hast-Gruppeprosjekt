@@ -131,33 +131,42 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
-        /// <summary>
-        /// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
-        /// </summary>
-        // TODO: Optimaliser
-        public void DockShips()
+		private void DockShips(DateTime? time)
+		{
+			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+				return;
+
+			Ship[] shipsToDock = [.. WaitingQueue];
+
+			foreach (Ship ship in shipsToDock)
+			{
+				foreach (Port port in Ports)
+				{
+					if (port.OccupyingShip == null && port.Size >= ship.Size)
+					{
+						if (time != null)
+							port.OccupyPort(ship, (DateTime)time);
+						else
+							port.OccupyPort(ship);
+
+						WaitingQueue.Remove(ship);
+						// Raise ShipArrived event when a ship arrives.
+						RaiseShipArrived(ship);
+						if (!ArePortsAvailable())
+							return;
+						break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
+		/// </summary>
+		// TODO: Optimaliser
+		public void DockShips()
         {
-            if (!ArePortsAvailable() || WaitingQueue.Count < 1)
-                return;
-
-            Ship[] shipsToDock = [.. WaitingQueue]; 
-
-            foreach (Ship ship in shipsToDock)
-            {
-                foreach (Port port in Ports)
-                {
-                    if (port.OccupyingShip == null && port.Size >= ship.Size)
-                    {
-                        port.OccupyPort(ship);
-                        WaitingQueue.Remove(ship);
-                        // Raise ShipArrived event when a ship arrives.
-                        RaiseShipArrived(ship);
-                        if (!ArePortsAvailable())
-                            return;
-                        break;
-                    }
-                }
-            }
+            DockShips(null);
         }
 
         /// <summary>
@@ -166,34 +175,14 @@ namespace HIOF.Hast.HARB.Framework
         /// <param name="time">Used for logging.</param>
         internal void DockShips(DateTime time)
         {
-            if (!ArePortsAvailable() || WaitingQueue.Count < 1)
-                return;
-
-            Ship[] shipsToDock = [.. WaitingQueue]; 
-
-            foreach (Ship ship in shipsToDock)
-            {
-                foreach (Port port in Ports)
-                {
-                    if (port.OccupyingShip == null && port.Size >= ship.Size)
-                    {
-                        port.OccupyPort(ship, time);
-                        WaitingQueue.Remove(ship);
-                        // Raise ShipArrived event when a ship arrives.
-                        RaiseShipArrived(ship);
-                        if (!ArePortsAvailable())
-                            return;
-                        break;
-                    }
-                }
-            }
+            DockShips((DateTime?) time);
         }
 
-        /// <summary>
-        /// Moves cargo from ships docked to warehouses.
-        /// </summary>
-        /// <param name="time">Used for logging.</param>
-        internal void OffloadCargoFromShips(DateTime time)
+		/// <summary>
+		/// Moves cargo from ships docked to warehouses.
+		/// </summary>
+		/// <param name="time">Used for logging.</param>
+		internal void OffloadCargoFromShips(DateTime time)
         {
             foreach (Port port in Ports)
             {

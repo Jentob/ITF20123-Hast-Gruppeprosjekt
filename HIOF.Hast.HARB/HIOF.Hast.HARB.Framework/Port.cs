@@ -23,19 +23,28 @@
             return false;
         }
 
-        /// <summary>
-        /// Docks the ship.
-        /// </summary>
-        /// <param name="ship">The ship to dock.</param>
-        /// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
-        internal bool OccupyPort(Ship ship)
+		 private bool OccupyPort(Ship ship, DateTime? time)
+		{
+			if (CanShipDock(ship))
+			{
+                if (time != null)
+                {
+					ship.RecordHistory(new((DateTime)time, $"Docked at {Name}({Id})"));
+				}
+				OccupyingShip = ship;
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Docks the ship.
+		/// </summary>
+		/// <param name="ship">The ship to dock.</param>
+		/// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
+		internal bool OccupyPort(Ship ship)
         {
-            if (CanShipDock(ship))
-            {
-                OccupyingShip = ship;
-                return true;
-            }
-            return false;
+            return OccupyPort(ship, null);
         }
 
         /// <summary>
@@ -46,28 +55,31 @@
         /// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
         internal bool OccupyPort(Ship ship, DateTime time)
         {
-            if (CanShipDock(ship))
-            {
-                ship.RecordHistory(new(time, $"Docked at {Name}({Id})"));
-                OccupyingShip = ship;
-                return true;
-            }
-            return false;
+            return OccupyPort(ship, (DateTime?) time);
         }
 
-        /// <summary>
-        /// Undocks the ship from the port.
-        /// </summary>
-        /// <returns>The ship on success, else returns null.</returns>
-        internal Ship? LeavePort()
+		private Ship? LeavePort(DateTime? time)
+		{
+			if (OccupyingShip != null)
+			{
+				Ship? shipToLeave = OccupyingShip;
+				OccupyingShip = null;
+                if (time != null)
+                {
+					shipToLeave.RecordHistory(new((DateTime)time, $"Undocked at {Name}({Id})"));
+                }
+				return shipToLeave;
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Undocks the ship from the port.
+		/// </summary>
+		/// <returns>The ship on success, else returns null.</returns>
+		internal Ship? LeavePort()
         {
-            if (OccupyingShip != null)
-            {
-                Ship? shipToLeave = OccupyingShip;
-                OccupyingShip = null;
-                return shipToLeave;
-            }
-            return null;
+            return LeavePort(null);
         }
 
         /// <summary>
@@ -77,14 +89,11 @@
         /// <returns>The ship on success, else returns null.</returns>
         internal Ship? LeavePort(DateTime time)
         {
-            if (OccupyingShip != null) {
-                Ship? shipToLeave = OccupyingShip;
-                OccupyingShip = null; 
-                shipToLeave.RecordHistory(new(time, $"Undocked at {Name}({Id})"));
-                return shipToLeave;
-            }
-            return null;
+            return LeavePort((DateTime?) time);
         }
+
+
+        // En private metode er ikke nødvendig for disse fire metodene
 
         /// <summary>
         /// Loads cargo onto the docked ship.
