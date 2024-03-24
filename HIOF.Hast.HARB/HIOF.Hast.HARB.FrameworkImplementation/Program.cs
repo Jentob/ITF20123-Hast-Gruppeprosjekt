@@ -27,7 +27,7 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             for (int i = 0; i < amountOfItems; i++)
             {
                 double weight = Math.Round(random.NextDouble() * (max - min) + min, 2);
-                cargoList.Add(new("Cargo", weight));
+                cargoList.Add(new("Cargo", weight, Teu.One));
             }
             foreach (Cargo cargo in cargoList)
             {

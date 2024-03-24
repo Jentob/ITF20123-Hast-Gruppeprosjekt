@@ -5,7 +5,7 @@
     /// </summary>
     /// <param name="name">Name of cargo</param>
     /// <param name="weight">Weight of cargo in tons</param>
-    public class Cargo(string name, double weightInTons, TEU size)
+    public class Cargo(string name, double weightInTons, Teu size)
     {
         /// <summary>Used to auto increment <see cref="Id"/>.</summary>
         private static int idCount = 0;
@@ -16,7 +16,7 @@
         /// <summary>Weight of cargo in tons.</summary>
         public double WeightInTons { get; } = weightInTons;
         /// <summary>Size of cargo container. Measured in TEUs.</summary>
-        public TEU Size { get; } = size;
+        public Teu Size { get; } = size;
         /// <summary>Keeps track of events related to the cargo-object.</summary>
         internal List<LogEntry> Log { get; } = [];
 
