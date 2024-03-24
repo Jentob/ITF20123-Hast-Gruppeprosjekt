@@ -1,6 +1,6 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    internal class Crane()
+    public class Crane()
     {
         private static int idCount = 0;
         public int Id { get; } = idCount++;

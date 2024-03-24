@@ -1,4 +1,6 @@
-﻿namespace HIOF.Hast.HARB.Framework
+﻿using System.Collections.ObjectModel;
+
+namespace HIOF.Hast.HARB.Framework
 {
     /// <summary>Represents a port for ships to dock to Can be used to load/unload cargo.</summary>
     /// <param name="name">Name of port.</param> 
@@ -10,13 +12,14 @@
         public string Name { get; } = name;
         public ShipSize Size { get; } = size;
         public Ship? OccupyingShip { get; private set; }
+		internal List<Crane> Cranes { get; } = [];
 
-        /// <summary>
-        /// Used for checking if a ship can dock.
-        /// </summary>
-        /// <param name="ship">The ship to check with.</param>
-        /// <returns><c>true</c> if it can. <c>false</c> if it can not.</returns>
-        private bool CanShipDock(Ship ship)
+		/// <summary>
+		/// Used for checking if a ship can dock.
+		/// </summary>
+		/// <param name="ship">The ship to check with.</param>
+		/// <returns><c>true</c> if it can. <c>false</c> if it can not.</returns>
+		private bool CanShipDock(Ship ship)
         {
             if(OccupyingShip == null && ship.Size <= Size)
                 return true;
@@ -141,7 +144,24 @@
             return null;
         }
 
-        public override string ToString()
+		public Collection<Crane> GetCranes()
+		{
+			return [.. Cranes];
+		}
+
+		public bool AddCrane(Crane crane)
+		{
+			Cranes.Add(crane);
+            return true;
+		}
+
+        public bool AddCrane()
+        {
+            return AddCrane(new());
+        }
+
+
+		public override string ToString()
         {
             string str = $"{GetType().Name} - {Name}({Id}) - Max size: {Size}";
             if (OccupyingShip != null) return str + $" - Occupied by {OccupyingShip}";
