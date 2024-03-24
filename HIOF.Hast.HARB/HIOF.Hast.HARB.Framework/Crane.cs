@@ -1,36 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HIOF.Hast.HARB.Framework
+﻿namespace HIOF.Hast.HARB.Framework
 {
-    internal class Crane
+    internal class Crane()
     {
-        internal int Id { get; private set; }
-        internal bool IsAvailable { get; private set; }
+        private static int idCount = 0;
+        public int Id { get; } = idCount++;
+        public Cargo? LoadedCargo { get; private set; }
 
-        public Crane(int craneId)
-        {
-            Id = craneId;
-            IsAvailable = true; 
-        }
 
-        public bool AcquireCrane()
-        {
-            if (IsAvailable)
-            {
-                IsAvailable = false; 
-                return true; 
-            }
-            return false; 
-        }
+		public bool LoadCargo(Cargo cargo)
+		{
+			if (LoadedCargo == null)
+			{
+				LoadedCargo = cargo;
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
-        public void ReleaseCrane()
-        {
-            IsAvailable = true;
-        }
-    }
+		public Cargo? UnloadCargo()
+		{
+			if (LoadedCargo != null)
+			{
+				Cargo? cargo = LoadedCargo;
+				LoadedCargo = null;
+				return cargo;
+			}
+			return null;
+		}
+	}
 }
 

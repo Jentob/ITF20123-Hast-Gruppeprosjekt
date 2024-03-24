@@ -1,51 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-
-namespace HIOF.Hast.HARB.Framework
+﻿namespace HIOF.Hast.HARB.Framework
 {
-    public class CargoTruck
-    {
-        public int Id { get; }
-        public bool IsLoaded { get; private set; }
-        public Cargo? LoadedCargo { get; private set; }
+    public class CargoTruck()
+	{
+        private static int idCount = 0;
+		public int Id { get; } = idCount++;
+		public Cargo? LoadedCargo { get; private set; }
 
-        public CargoTruck(int id)
+		public bool LoadCargo(Cargo cargo)
         {
-            Id = id;
-            IsLoaded = false;
-        }
-
-        public void LoadCargo(Cargo cargo)
-        {
-            if (!IsLoaded)
+            if (LoadedCargo == null)
             {
                 LoadedCargo = cargo;
-                IsLoaded = true;
-                Console.WriteLine($"Truck {Id} loaded with cargo {cargo.Id}");
+                return true;
             }
             else
             {
-                Console.WriteLine($"Truck {Id} is already loaded with cargo.");
+                return false;
             }
         }
 
-        public void UnloadCargo()
+        public Cargo? UnloadCargo()
         {
-            if (IsLoaded)
-            {
-                Console.WriteLine($"Truck {Id} unloaded cargo.");
-                LoadedCargo = null;
-                IsLoaded = false;
-            }
-            else
-            {
-                Console.WriteLine($"Truck {Id} is not loaded with cargo.");
-            }
-        }
+            if (LoadedCargo != null)
+			{
+				Cargo? cargo = LoadedCargo;
+				LoadedCargo = null;
+				return cargo;
+			}
+			return null;
+		}
     }
 }
 
