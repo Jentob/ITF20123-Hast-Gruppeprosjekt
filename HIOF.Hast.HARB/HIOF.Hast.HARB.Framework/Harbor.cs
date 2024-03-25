@@ -12,6 +12,10 @@ namespace HIOF.Hast.HARB.Framework
         internal List<Ship> SailingShips { get; } = [];
         internal List<Warehouse> Warehouses { get; } = [];
         internal List<Port> Ports { get; } = [];
+        internal List<Crane> Cranes { get; } = [];
+        internal List<CargoTruck> CargoTrucks { get; } = [];
+        internal List<AGV> AGVs { get; } = [];
+
 
         /// <summary>
         /// Event raises when a ship sails from a port.
@@ -299,6 +303,32 @@ namespace HIOF.Hast.HARB.Framework
                 }
             }
         }
+
+        public List<AGV> InitializeAllAGVs()
+        {
+            List<AGV> AGVs = [];
+            for (int i = 0; i < 20; i++)
+            {
+                AGV agv =new AGV();
+                AGVs.Add(agv);
+            }
+            return AGVs;
+        }
+
+        internal AGV GetAvailableAGV()
+        {
+            foreach (AGV agv in AGVs)
+            {
+                if (agv.IsAvailable)
+                {
+                    return agv;
+                }
+            }
+            return null;
+        }
+
+
+	
         
         /// <summary>
         /// Collects all ships from all internal lists.

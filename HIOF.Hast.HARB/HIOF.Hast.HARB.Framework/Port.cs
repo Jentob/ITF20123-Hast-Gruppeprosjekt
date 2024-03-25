@@ -159,9 +159,9 @@ namespace HIOF.Hast.HARB.Framework
         {
             return AddCrane(new());
         }
+        
 
-
-		public override string ToString()
+        public override string ToString()
         {
             string str = $"{GetType().Name} - {Name}({Id}) - Max size: {Size}";
             if (OccupyingShip != null) return str + $" - Occupied by {OccupyingShip}";

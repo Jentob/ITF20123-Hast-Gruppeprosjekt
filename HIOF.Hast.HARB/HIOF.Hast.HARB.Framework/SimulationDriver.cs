@@ -57,6 +57,7 @@
         private static void Update(Harbor harbor, DateTime time)
         {
             harbor.DockShips(time);
+            harbor.InitializeAllAGVs();
             harbor.OffloadCargoFromShips(time);
             harbor.LoadCargoToShips(time);
             harbor.ReleaseShips(time);
