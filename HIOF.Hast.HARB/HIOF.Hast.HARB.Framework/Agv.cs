@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace HIOF.Hast.HARB.Framework
 {
     public class Agv() : ICargoTransport
-	{
+    {
         private static int idCount = 0;
         public int Id { get; } = idCount++;
         public Cargo? LoadedCargo { get; private set; }

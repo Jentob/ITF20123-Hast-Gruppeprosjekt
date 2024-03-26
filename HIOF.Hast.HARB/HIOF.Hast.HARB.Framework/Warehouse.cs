@@ -48,34 +48,34 @@ namespace HIOF.Hast.HARB.Framework
             return Inventory.Count >= MaxCapacity;
         }
 
-		private bool AddCargo(Cargo cargo, DateTime? time)
-		{
-			if (IsWarehouseFull())
-				return false;
+        private bool AddCargo(Cargo cargo, DateTime? time)
+        {
+            if (IsWarehouseFull())
+                return false;
             if (time != null)
             {
-				cargo.RecordHistory(new((DateTime) time, $"Added to warehouse {Name}({Id})"));
-			}
-			return Inventory.Add(cargo);
-		}
+                cargo.RecordHistory(new((DateTime) time, $"Added to warehouse {Name}({Id})"));
+            }
+            return Inventory.Add(cargo);
+        }
 
-		/// <summary>
-		/// Adds cargo to the <see cref="Inventory"/>.
-		/// </summary>
-		/// <param name="cargo">The cargo to be added.</param>
-		/// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
-		internal bool AddCargo(Cargo cargo)
+        /// <summary>
+        /// Adds cargo to the <see cref="Inventory"/>.
+        /// </summary>
+        /// <param name="cargo">The cargo to be added.</param>
+        /// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
+        internal bool AddCargo(Cargo cargo)
         {
             return AddCargo(cargo, null);
         }
 
-		/// <summary>
-		/// Works the same as <see cref="AddCargo(Cargo)"/> but also logs.
-		/// </summary>
-		/// <param name="cargo">The cargo to be added.</param>
-		/// <param name="time">Used for logging.</param>
-		/// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
-		internal bool AddCargo(Cargo cargo, DateTime time)
+        /// <summary>
+        /// Works the same as <see cref="AddCargo(Cargo)"/> but also logs.
+        /// </summary>
+        /// <param name="cargo">The cargo to be added.</param>
+        /// <param name="time">Used for logging.</param>
+        /// <returns><c>true</c> on success. <c>false</c> on fail.</returns>
+        internal bool AddCargo(Cargo cargo, DateTime time)
         {
             return AddCargo(cargo, (DateTime?) time);
         }

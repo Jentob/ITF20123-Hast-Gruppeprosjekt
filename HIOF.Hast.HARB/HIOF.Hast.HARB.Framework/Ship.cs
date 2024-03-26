@@ -39,12 +39,12 @@ namespace HIOF.Hast.HARB.Framework
             return [.. Cargohold];
         }
 
-		/// <summary>
-		/// Caclulates the total weight of the cargo onboard.
-		/// </summary>
-		/// <returns>The total weight.</returns>
-		public double CargoWeight()
-		{
+        /// <summary>
+        /// Caclulates the total weight of the cargo onboard.
+        /// </summary>
+        /// <returns>The total weight.</returns>
+        public double CargoWeight()
+        {
             double weight = 0;
             foreach (Cargo item in Cargohold)
                 weight += item.WeightInTons;
@@ -64,20 +64,20 @@ namespace HIOF.Hast.HARB.Framework
             return false;
         }
 
-		private bool AddCargo(Cargo cargo, DateTime? time)
-		{
-			if (!CargoCheck(cargo))
-				return false;
-			if (time != null)
-			{
-				cargo.RecordHistory(new((DateTime)time, $"Added to ship {Name}({Id})"));
-				RecordHistory(new((DateTime)time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
-			}
+        private bool AddCargo(Cargo cargo, DateTime? time)
+        {
+            if (!CargoCheck(cargo))
+                return false;
+            if (time != null)
+            {
+                cargo.RecordHistory(new((DateTime)time, $"Added to ship {Name}({Id})"));
+                RecordHistory(new((DateTime)time, $"{cargo.Name}({cargo.Id}) added to cargohold"));
+            }
 
-			Cargohold.Add(cargo);
+            Cargohold.Add(cargo);
 
-			return true;
-		}
+            return true;
+        }
 
         /// <summary>
         /// Adds cargo to the <see cref="Cargohold"/>.
@@ -99,26 +99,26 @@ namespace HIOF.Hast.HARB.Framework
             return AddCargo(cargo, (DateTime?) time);
         }
 
-		private Cargo? RemoveCargo(Cargo cargo, DateTime? time)
+        private Cargo? RemoveCargo(Cargo cargo, DateTime? time)
         {
-			if (!Cargohold.Contains(cargo)) return null;
-			Cargohold.Remove(cargo);
+            if (!Cargohold.Contains(cargo)) return null;
+            Cargohold.Remove(cargo);
 
             if (time != null)
             {
-			    RecordHistory(new((DateTime) time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
-			    cargo.RecordHistory(new((DateTime) time, $"Removed from ship {Name}({Id})"));
+                RecordHistory(new((DateTime) time, $"{cargo.Name}({cargo.Id}) removed from cargohold"));
+                cargo.RecordHistory(new((DateTime) time, $"Removed from ship {Name}({Id})"));
             }
 
-			return cargo;
-		}
+            return cargo;
+        }
 
-		/// <summary>
-		/// Removes cargo from the <see cref="Cargohold"/>.
-		/// </summary>
-		/// <param name="cargo">The cargo to be removed.</param>
-		/// <returns>The cargo on success. null on fail.</returns>
-		internal Cargo? RemoveCargo(Cargo cargo)
+        /// <summary>
+        /// Removes cargo from the <see cref="Cargohold"/>.
+        /// </summary>
+        /// <param name="cargo">The cargo to be removed.</param>
+        /// <returns>The cargo on success. null on fail.</returns>
+        internal Cargo? RemoveCargo(Cargo cargo)
         {
             return RemoveCargo(cargo, null);
         }

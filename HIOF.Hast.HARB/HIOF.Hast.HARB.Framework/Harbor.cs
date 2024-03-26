@@ -134,40 +134,40 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
-		private void DockShips(DateTime? time)
-		{
-			if (!ArePortsAvailable() || WaitingQueue.Count < 1)
-				return;
+        private void DockShips(DateTime? time)
+        {
+            if (!ArePortsAvailable() || WaitingQueue.Count < 1)
+                return;
 
-			Ship[] shipsToDock = [.. WaitingQueue];
+            Ship[] shipsToDock = [.. WaitingQueue];
 
-			foreach (Ship ship in shipsToDock)
-			{
-				foreach (Port port in Ports)
-				{
-					if (port.OccupyingShip == null && port.Size >= ship.Size)
-					{
-						if (time != null)
-							port.OccupyPort(ship, (DateTime)time);
-						else
-							port.OccupyPort(ship);
+            foreach (Ship ship in shipsToDock)
+            {
+                foreach (Port port in Ports)
+                {
+                    if (port.OccupyingShip == null && port.Size >= ship.Size)
+                    {
+                        if (time != null)
+                            port.OccupyPort(ship, (DateTime)time);
+                        else
+                            port.OccupyPort(ship);
 
-						WaitingQueue.Remove(ship);
-						// Raise ShipArrived event when a ship arrives.
-						RaiseShipArrived(ship);
-						if (!ArePortsAvailable())
-							return;
-						break;
-					}
-				}
-			}
-		}
+                        WaitingQueue.Remove(ship);
+                        // Raise ShipArrived event when a ship arrives.
+                        RaiseShipArrived(ship);
+                        if (!ArePortsAvailable())
+                            return;
+                        break;
+                    }
+                }
+            }
+        }
 
-		/// <summary>
-		/// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
-		/// </summary>
-		// TODO: Optimaliser
-		public void DockShips()
+        /// <summary>
+        /// Moves ships from <see cref="WaitingQueue"/> to a port in <see cref="Ports"/> if they fit.
+        /// </summary>
+        // TODO: Optimaliser
+        public void DockShips()
         {
             DockShips(null);
         }
@@ -181,11 +181,11 @@ namespace HIOF.Hast.HARB.Framework
             DockShips((DateTime?) time);
         }
 
-		/// <summary>
-		/// Moves cargo from ships docked to warehouses.
-		/// </summary>
-		/// <param name="time">Used for logging.</param>
-		internal void OffloadCargoFromShips(DateTime time)
+        /// <summary>
+        /// Moves cargo from ships docked to warehouses.
+        /// </summary>
+        /// <param name="time">Used for logging.</param>
+        internal void OffloadCargoFromShips(DateTime time)
         {
             foreach (Port port in Ports)
             {
@@ -327,7 +327,7 @@ namespace HIOF.Hast.HARB.Framework
         }
 
 
-	
+    
         
         /// <summary>
         /// Collects all ships from all internal lists.

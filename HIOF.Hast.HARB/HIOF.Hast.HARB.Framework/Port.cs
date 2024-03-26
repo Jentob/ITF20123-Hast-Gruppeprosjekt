@@ -12,40 +12,40 @@ namespace HIOF.Hast.HARB.Framework
         public string Name { get; } = name;
         public ShipSize Size { get; } = size;
         public Ship? OccupyingShip { get; private set; }
-		internal List<Crane> Cranes { get; } = [];
+        internal List<Crane> Cranes { get; } = [];
 
-		/// <summary>
-		/// Used for checking if a ship can dock.
-		/// </summary>
-		/// <param name="ship">The ship to check with.</param>
-		/// <returns><c>true</c> if it can. <c>false</c> if it can not.</returns>
-		private bool CanShipDock(Ship ship)
+        /// <summary>
+        /// Used for checking if a ship can dock.
+        /// </summary>
+        /// <param name="ship">The ship to check with.</param>
+        /// <returns><c>true</c> if it can. <c>false</c> if it can not.</returns>
+        private bool CanShipDock(Ship ship)
         {
             if(OccupyingShip == null && ship.Size <= Size)
                 return true;
             return false;
         }
 
-		 private bool OccupyPort(Ship ship, DateTime? time)
-		{
-			if (CanShipDock(ship))
-			{
+         private bool OccupyPort(Ship ship, DateTime? time)
+        {
+            if (CanShipDock(ship))
+            {
                 if (time != null)
                 {
-					ship.RecordHistory(new((DateTime)time, $"Docked at {Name}({Id})"));
-				}
-				OccupyingShip = ship;
-				return true;
-			}
-			return false;
-		}
+                    ship.RecordHistory(new((DateTime)time, $"Docked at {Name}({Id})"));
+                }
+                OccupyingShip = ship;
+                return true;
+            }
+            return false;
+        }
 
-		/// <summary>
-		/// Docks the ship.
-		/// </summary>
-		/// <param name="ship">The ship to dock.</param>
-		/// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
-		internal bool OccupyPort(Ship ship)
+        /// <summary>
+        /// Docks the ship.
+        /// </summary>
+        /// <param name="ship">The ship to dock.</param>
+        /// <returns><c>true</c> if it docked successfully. <c>false</c> if it fails.</returns>
+        internal bool OccupyPort(Ship ship)
         {
             return OccupyPort(ship, null);
         }
@@ -61,26 +61,26 @@ namespace HIOF.Hast.HARB.Framework
             return OccupyPort(ship, (DateTime?) time);
         }
 
-		private Ship? LeavePort(DateTime? time)
-		{
-			if (OccupyingShip != null)
-			{
-				Ship? shipToLeave = OccupyingShip;
-				OccupyingShip = null;
+        private Ship? LeavePort(DateTime? time)
+        {
+            if (OccupyingShip != null)
+            {
+                Ship? shipToLeave = OccupyingShip;
+                OccupyingShip = null;
                 if (time != null)
                 {
-					shipToLeave.RecordHistory(new((DateTime)time, $"Undocked at {Name}({Id})"));
+                    shipToLeave.RecordHistory(new((DateTime)time, $"Undocked at {Name}({Id})"));
                 }
-				return shipToLeave;
-			}
-			return null;
-		}
+                return shipToLeave;
+            }
+            return null;
+        }
 
-		/// <summary>
-		/// Undocks the ship from the port.
-		/// </summary>
-		/// <returns>The ship on success, else returns null.</returns>
-		internal Ship? LeavePort()
+        /// <summary>
+        /// Undocks the ship from the port.
+        /// </summary>
+        /// <returns>The ship on success, else returns null.</returns>
+        internal Ship? LeavePort()
         {
             return LeavePort(null);
         }
@@ -144,16 +144,16 @@ namespace HIOF.Hast.HARB.Framework
             return null;
         }
 
-		public Collection<Crane> GetCranes()
-		{
-			return [.. Cranes];
-		}
+        public Collection<Crane> GetCranes()
+        {
+            return [.. Cranes];
+        }
 
-		public bool AddCrane(Crane crane)
-		{
-			Cranes.Add(crane);
+        public bool AddCrane(Crane crane)
+        {
+            Cranes.Add(crane);
             return true;
-		}
+        }
 
         public bool AddCrane()
         {
