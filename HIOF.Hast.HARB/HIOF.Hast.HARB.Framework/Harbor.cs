@@ -12,9 +12,8 @@ namespace HIOF.Hast.HARB.Framework
         internal List<Ship> SailingShips { get; } = [];
         internal List<Warehouse> Warehouses { get; } = [];
         internal List<Port> Ports { get; } = [];
-        internal List<Crane> Cranes { get; } = [];
         internal List<CargoTruck> CargoTrucks { get; } = [];
-        internal List<AGV> AGVs { get; } = [];
+        internal List<Agv> Agvs { get; } = [];
 
 
         /// <summary>
@@ -304,20 +303,20 @@ namespace HIOF.Hast.HARB.Framework
             }
         }
 
-        public List<AGV> InitializeAllAGVs()
+        public List<Agv> InitializeAllAgvs()
         {
-            List<AGV> AGVs = [];
+            List<Agv> AGVs = [];
             for (int i = 0; i < 20; i++)
             {
-                AGV agv =new AGV();
+                Agv agv = new();
                 AGVs.Add(agv);
             }
             return AGVs;
         }
 
-        internal AGV GetAvailableAGV()
+        internal Agv? GetAvailableAGV()
         {
-            foreach (AGV agv in AGVs)
+            foreach (Agv agv in Agvs)
             {
                 if (agv.IsAvailable)
                 {

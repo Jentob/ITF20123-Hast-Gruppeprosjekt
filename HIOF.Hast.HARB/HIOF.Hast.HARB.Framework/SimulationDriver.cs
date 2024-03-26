@@ -33,11 +33,14 @@
         /// <param name="endTime">The date the simulation ends.</param>
         public static void Run(Harbor harbor, DateTime startTime, DateTime endTime)
         {
-            // events
-            // harbor.ShipSailing += Harbor_ShipSailed;
-            // harbor.ShipArrived += Harbor_ShipArrived;
+			// events
+			// harbor.ShipSailing += Harbor_ShipSailed;
+			// harbor.ShipArrived += Harbor_ShipArrived;
 
-            DateTime time = startTime;
+			harbor.InitializeAllAgvs();
+
+
+			DateTime time = startTime;
             while (time < endTime)
             {
                 Update(harbor, time);
@@ -57,7 +60,6 @@
         private static void Update(Harbor harbor, DateTime time)
         {
             harbor.DockShips(time);
-            harbor.InitializeAllAGVs();
             harbor.OffloadCargoFromShips(time);
             harbor.LoadCargoToShips(time);
             harbor.ReleaseShips(time);

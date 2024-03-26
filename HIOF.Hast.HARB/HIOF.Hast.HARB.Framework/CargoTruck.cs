@@ -1,6 +1,6 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    public class CargoTruck()
+    public class CargoTruck() : ICargoTransport
 	{
         private static int idCount = 0;
 		public int Id { get; } = idCount++;

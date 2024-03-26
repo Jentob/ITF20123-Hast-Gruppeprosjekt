@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace HIOF.Hast.HARB.Framework
 {
-    public class AGV()
-    {
+    public class Agv() : ICargoTransport
+	{
         private static int idCount = 0;
         public int Id { get; } = idCount++;
         public Cargo? LoadedCargo { get; private set; }
         internal bool IsAvailable { get; set; }
 
-        public bool LoadCargoToAGV(Cargo cargo)
+        public bool LoadCargo(Cargo cargo)
         {
             if (LoadedCargo == null)
             {
@@ -25,7 +25,7 @@ namespace HIOF.Hast.HARB.Framework
                 return false;
             }
         }
-        public Cargo? UnloadCargoFromAGV()
+        public Cargo? UnloadCargo()
         {
             if (LoadedCargo != null)
             {
