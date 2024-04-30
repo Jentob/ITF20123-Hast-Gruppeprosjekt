@@ -11,6 +11,8 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             Harbor harbor = new("Havn");
 
+            SimulationDriver driver = new(harbor);
+
             Port port;
 
             port = new("Havneplass 1", ShipSize.Large);
@@ -36,7 +38,7 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             
             Console.WriteLine("Simulation started");
-            SimulationDriver.Run(harbor, start, end);
+            driver.Run(start, end);
             Console.WriteLine("Simulation ended");
         }
     }

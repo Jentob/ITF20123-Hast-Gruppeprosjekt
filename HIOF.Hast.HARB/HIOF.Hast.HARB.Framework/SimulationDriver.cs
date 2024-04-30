@@ -1,42 +1,24 @@
 ﻿namespace HIOF.Hast.HARB.Framework
 {
-    public class SimulationDriver
+    /// <summary>
+    /// Driver for running simulation of harbor.
+    /// </summary>
+	/// <param name="harbor">The harbor object to run the simulation on.</param>
+	public class SimulationDriver(Harbor harbor)
     {
-        // Sailing events 
-        private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
-        {
-            Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
-        }
 
-        private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
-        {
-            // Print a message when a ship arrives
-            Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
-        }
-
-        // Cargo loading events
-        private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
-        {
-            Console.WriteLine($"Cargo {e.CargoLoaded} loading onto ship.");
-        }
-
-        private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
-        {
-            Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
-        }
+		/// <summary>
+		/// The harbor object to run the simulation on.
+		/// </summary>
+		public Harbor Harbor { get; set; } = harbor;
 
         /// <summary>
         /// Runs the simulation.
         /// </summary>
-        /// <param name="harbor">A harbor object to run the simulation on.</param>
         /// <param name="startTime">The date the simulation starts.</param>
         /// <param name="endTime">The date the simulation ends.</param>
-        public static void Run(Harbor harbor, DateTime startTime, DateTime endTime)
+        public void Run(DateTime startTime, DateTime endTime)
         {
-            // events
-            // harbor.ShipSailing += Harbor_ShipSailed;
-            // harbor.ShipArrived += Harbor_ShipArrived;
-
             harbor.InitializeAllAgvs();
 
 
