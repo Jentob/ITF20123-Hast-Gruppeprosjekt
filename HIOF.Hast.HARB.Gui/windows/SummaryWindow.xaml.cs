@@ -9,16 +9,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HIOF.Hast.HARB.Gui
+namespace HIOF.Hast.HARB.Gui.windows
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
+    /// <summary>
+    /// Interaction logic for SummaryWindow.xaml
+    /// </summary>
+    public partial class SummaryWindow : Window
 	{
-		public MainWindow()
+		public SummaryWindow()
 		{
 			InitializeComponent();
 		}
-	}
+
+    }
 }

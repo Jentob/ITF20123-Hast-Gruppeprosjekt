@@ -1,0 +1,16 @@
+﻿<Window x:Class="HIOF.Hast.HARB.Gui.windows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="HIOF Hast HARB Simulation" Height="450" Width="800">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="HIOF Hast HARB Simulation Control" FontSize="20" FontWeight="Bold" Margin="10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock x:Name="simulationStatus" Text="Simulation is not running" Margin="10" VerticalAlignment="Center"/>
+            <TextBlock x:Name="statusIcon" Text="✗" Foreground="Red" FontSize="18" VerticalAlignment="Center"/>
+        </StackPanel>
+        <Button x:Name="runSimulationButton" Content="Run Simulation" Margin="10" Click="RunSimulation_Click"/>
+        <Button Content="Setup Premises" Margin="10" Click="SetupPremises_Click"/>
+        <Button Content="View Real-Time Events" Margin="10" Click="ViewEvents_Click"/>
+        <Button Content="View Simulation Summary" Margin="10" Click="ViewSummary_Click"/>
+    </StackPanel>
+</Window>

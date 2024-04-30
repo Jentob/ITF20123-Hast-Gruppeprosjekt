@@ -4,12 +4,42 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
-            Harbor harbor = new("Harbor 1");
+            StartSimulationWithRandomObjects(args);
+        }
 
-            DateTime start = new(2024, 01, 01);
-            DateTime end = new(2024, 03, 01);
+        static void StartSimulation(Harbor harbor)
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now.AddYears(1);
+
+            StartSimulation(start, end, harbor);
+
+        }
+
+        static void StartSimulation(DateTime end, Harbor harbor)
+        {
+            DateTime start = DateTime.Now;
+
+            StartSimulation(start, end, harbor);
+
+        }
+
+        static void StartSimulation(DateTime start, DateTime end, Harbor harbor)
+        {
+            Console.WriteLine("Simulation started");
+
+            SimulationDriver.Run(harbor, start, end);
+            Console.WriteLine("Simulation ended");
+        }
+
+        static void StartSimulationWithRandomObjects(string[] args)
+        {
+
+            Harbor harbor = new("Harbor 1");
+            DateTime start = DateTime.Now;
 
 
             // -----------------
@@ -27,13 +57,13 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             for (int i = 0; i < amountOfItems; i++)
             {
                 double weight = Math.Round(random.NextDouble() * (max - min) + min, 2);
-                cargoList.Add(new("Cargo", weight, (Teu) 1));
+                cargoList.Add(new("Cargo", weight, (Teu)1));
             }
             foreach (Cargo cargo in cargoList)
             {
                 harbor.AddCargo(cargo);
             }
-            
+
             harbor.AddPort(new("Medium Port", ShipSize.Medium));
             harbor.AddPort(new("Large Port", ShipSize.Large));
 
@@ -45,13 +75,20 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             // --------------------
             // Starter Simulasjonen
             // --------------------
-            Console.WriteLine("Simulation started");
-            SimulationDriver.Run(harbor, start, end);
-            Console.WriteLine("Simulation ended");
+            StartSimulation(start, harbor);
 
             // -----------------
             // Uthenting av data
             // -----------------
+
+            WriteOutData(harbor);
+
+
+        }
+
+        static void WriteOutData(Harbor harbor)
+        {
+
             Console.WriteLine();
             Console.WriteLine("Warehouses:");
             foreach (Warehouse warehouse in harbor.GetWarehouses())
@@ -106,8 +143,6 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
-
-        
         }
     }
 }
