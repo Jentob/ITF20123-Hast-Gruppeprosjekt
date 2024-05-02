@@ -47,7 +47,8 @@ namespace HIOF.Hast.HARB.Gui.windows
             UpdateSimulationStatus();
             if (isSimulationRunning)
             {
-                SimulationDriver.Run(harbor, start, end);
+                SimulationDriver driver = new(harbor);
+                driver.Run(start, end);
             }
             else
             {
