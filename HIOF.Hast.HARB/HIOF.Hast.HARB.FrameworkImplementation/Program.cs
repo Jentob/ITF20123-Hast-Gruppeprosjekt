@@ -4,76 +4,48 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
-		// Sailing events 
-		private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
-		{
-			Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
-		}
-
-		private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
-		{
-			// Print a message when a ship arrives
-			Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
-		}
-
-		// Cargo loading events
-		private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
-		{
-			Console.WriteLine($"Cargo {e.CargoLoaded} loading onto ship.");
-		}
-
-		private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
-		{
-			Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
-		}
-
-		static void Main(string[] args)
+        // Sailing events 
+        private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
         {
-            StartSimulationWithRandomObjects(args);
+            Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
         }
 
-        static void StartSimulation(SimulationDriver driver)
+        private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
         {
-            DateTime start = DateTime.Now;
-            DateTime end = DateTime.Now.AddYears(1);
-
-            StartSimulation(start, end, driver);
-
+            // Print a message when a ship arrives
+            Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
         }
 
-        static void StartSimulation(DateTime end, SimulationDriver driver)
+        // Cargo loading events
+        private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
         {
-            DateTime start = DateTime.Now;
-
-            StartSimulation(start, end, driver);
-
+            Console.WriteLine($"Cargo {e.CargoLoaded} loading onto ship.");
         }
 
-        static void StartSimulation(DateTime start, DateTime end, SimulationDriver driver)
+        private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
         {
-            Console.WriteLine("Simulation started");
-
-            driver.Run(start, end);
-            Console.WriteLine("Simulation ended");
+            Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
         }
 
-        static void StartSimulationWithRandomObjects(string[] args)
+        static void Main(string[] args)
         {
-
             Harbor harbor = new("Harbor 1");
 
+            DateTime start = new(2024, 01, 01);
+            DateTime end = new(2024, 03, 01);
+
             SimulationDriver driver = new(harbor);
+            driver.PrintProgress = true;
 
-            DateTime start = DateTime.Now;
+            // events
+            // harbor.ShipSailing += Harbor_ShipSailed;
+            // harbor.ShipArrived += Harbor_ShipArrived;
 
-			// events
-			// harbor.ShipSailing += Harbor_ShipSailed;
-			// harbor.ShipArrived += Harbor_ShipArrived;
 
-			// -----------------
-			// Oppsett av havnen
-			// -----------------
-			harbor.AddWarehouse(new("Large warehouse", 20));
+            // -----------------
+            // Oppsett av havnen
+            // -----------------
+            harbor.AddWarehouse(new("Large warehouse", 20));
             harbor.AddWarehouse(new("Small warehouse", 10));
 
             List<Cargo> cargoList = [];
@@ -103,20 +75,13 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             // --------------------
             // Starter Simulasjonen
             // --------------------
-            StartSimulation(start, driver);
+            Console.WriteLine("Simulation started");
+            driver.Run(start, end);
+            Console.WriteLine("Simulation ended");
 
             // -----------------
             // Uthenting av data
             // -----------------
-
-            WriteOutData(harbor);
-
-
-        }
-
-        static void WriteOutData(Harbor harbor)
-        {
-
             Console.WriteLine();
             Console.WriteLine("Warehouses:");
             foreach (Warehouse warehouse in harbor.GetWarehouses())
@@ -171,6 +136,7 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
+
         }
     }
 }

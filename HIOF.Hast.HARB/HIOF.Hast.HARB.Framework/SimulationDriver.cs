@@ -3,14 +3,19 @@
     /// <summary>
     /// Driver for running simulation of harbor.
     /// </summary>
-	/// <param name="harbor">The harbor object to run the simulation on.</param>
-	public class SimulationDriver(Harbor harbor)
+    /// <param name="harbor">The harbor object to run the simulation on.</param>
+    public class SimulationDriver(Harbor harbor)
     {
 
-		/// <summary>
-		/// The harbor object to run the simulation on.
-		/// </summary>
-		public Harbor Harbor { get; set; } = harbor;
+        /// <summary>
+        /// The harbor object to run the simulation on.
+        /// </summary>
+        public Harbor Harb { get; set; } = harbor;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool PrintProgress { get; set; } = false;
 
         /// <summary>
         /// Runs the simulation.
@@ -19,19 +24,24 @@
         /// <param name="endTime">The date the simulation ends.</param>
         public void Run(DateTime startTime, DateTime endTime)
         {
-            harbor.InitializeAllAgvs();
+            Harb.InitializeAllAgvs();
 
 
             DateTime time = startTime;
             while (time < endTime)
             {
-                Update(harbor, time);
+                Update(Harb, time);
                 time = time.AddMinutes(1);
 
-                if (time == time.Date)
+                if (PrintProgress && time == time.Date)
+                {
                     Console.Write($"\r{time:dd.MM.yyyy} / {endTime:dd.MM.yyyy}");
+                }
             }
-            Console.WriteLine();
+            if (PrintProgress)
+            {
+                Console.WriteLine();
+            }
         }
 
         /// <summary>
@@ -39,13 +49,13 @@
         /// </summary>
         /// <param name="harbor">The <see cref="Harbor"/> to update.</param>
         /// <param name="time">The time to update to.</param>
-        private static void Update(Harbor harbor, DateTime time)
+        private static void Update(Harbor harb, DateTime time)
         {
-            harbor.DockShips(time);
-            harbor.OffloadCargoFromShips(time);
-            harbor.LoadCargoToShips(time);
-            harbor.ReleaseShips(time);
-            harbor.QueueShips(time);
+            harb.DockShips(time);
+            harb.OffloadCargoFromShips(time);
+            harb.LoadCargoToShips(time);
+            harb.ReleaseShips(time);
+            harb.QueueShips(time);
         }
     }
 }
