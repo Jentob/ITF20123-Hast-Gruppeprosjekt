@@ -4,42 +4,42 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 {
     internal class Program
     {
+        // Sailing events 
+        private static void Harbor_ShipSailed(object? sender, ShipSailingEventArgs e)
+        {
+            Console.WriteLine($"Ship {e.ShipSailing} has sailed from the port in {e.ShipSailing.Destination}");
+        }
+
+        private static void Harbor_ShipArrived(object? sender, ShipArrivedEventArgs e)
+        {
+            // Print a message when a ship arrives
+            Console.WriteLine($"Ship {e.ShipArrived} arrived at port in {e.ShipArrived.Destination}");
+        }
+
+        // Cargo loading events
+        private static void Harbor_CargoLoaded(object? sender, ShipLoadingCargoEventArgs e)
+        {
+            Console.WriteLine($"Cargo {e.CargoLoaded} loading onto ship.");
+        }
+
+        private static void Harbor_CargoOffloaded(object? sender, ShipOffloadingCargoEventArgs e)
+        {
+            Console.WriteLine($"Cargo {e.CargoOffloaded} has been unloaded");
+        }
 
         static void Main(string[] args)
         {
-            StartSimulationWithRandomObjects(args);
-        }
-
-        static void StartSimulation(Harbor harbor)
-        {
-            DateTime start = DateTime.Now;
-            DateTime end = DateTime.Now.AddYears(1);
-
-            StartSimulation(start, end, harbor);
-
-        }
-
-        static void StartSimulation(DateTime end, Harbor harbor)
-        {
-            DateTime start = DateTime.Now;
-
-            StartSimulation(start, end, harbor);
-
-        }
-
-        static void StartSimulation(DateTime start, DateTime end, Harbor harbor)
-        {
-            Console.WriteLine("Simulation started");
-
-            SimulationDriver.Run(harbor, start, end);
-            Console.WriteLine("Simulation ended");
-        }
-
-        static void StartSimulationWithRandomObjects(string[] args)
-        {
-
             Harbor harbor = new("Harbor 1");
-            DateTime start = DateTime.Now;
+
+            DateTime start = new(2024, 01, 01);
+            DateTime end = new(2024, 03, 01);
+
+            SimulationDriver driver = new(harbor);
+            driver.PrintProgress = true;
+
+            // events
+            // harbor.ShipSailing += Harbor_ShipSailed;
+            // harbor.ShipArrived += Harbor_ShipArrived;
 
 
             // -----------------
@@ -75,20 +75,13 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
             // --------------------
             // Starter Simulasjonen
             // --------------------
-            StartSimulation(start, harbor);
+            Console.WriteLine("Simulation started");
+            driver.Run(start, end);
+            Console.WriteLine("Simulation ended");
 
             // -----------------
             // Uthenting av data
             // -----------------
-
-            WriteOutData(harbor);
-
-
-        }
-
-        static void WriteOutData(Harbor harbor)
-        {
-
             Console.WriteLine();
             Console.WriteLine("Warehouses:");
             foreach (Warehouse warehouse in harbor.GetWarehouses())
@@ -143,6 +136,7 @@ namespace HIOF.Hast.HARB.FrameworkImplementation
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();
+
         }
     }
 }
