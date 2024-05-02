@@ -1,5 +1,24 @@
 ﻿<Window x:Class="HIOF.Hast.HARB.Gui.windows.SummaryWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="HIOF Hast HARB Simulation" Height="450" Width="800">
+        Title="Simulation Summary" Height="600" Width="800" ScrollViewer.VerticalScrollBarVisibility="Auto">
+    <ScrollViewer>
+        <StackPanel Margin="10">
+            <Expander Header="Warehouses" IsExpanded="True">
+                <ListBox x:Name="warehousesListBox"/>
+            </Expander>
+            <Expander Header="Ports" IsExpanded="False">
+                <ListBox x:Name="portsListBox"/>
+            </Expander>
+            <Expander Header="Ships in Queue" IsExpanded="False">
+                <ListBox x:Name="shipsInQueueListBox"/>
+            </Expander>
+            <Expander Header="Sailing Ships" IsExpanded="False">
+                <ListBox x:Name="sailingShipsListBox"/>
+            </Expander>
+            <Expander Header="Ship History" IsExpanded="False">
+                <ListBox x:Name="shipHistoryListBox"/>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using HIOF.Hast.HARB.Framework;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,16 +19,23 @@ namespace HIOF.Hast.HARB.Gui.windows
     {
 
         private bool isSimulationRunning = false;
+        private Harbor harbor;
+        private DateTime start, end;
 
         public MainWindow()
         {
             InitializeComponent();
             UpdateSimulationStatus();
+
+
+            harbor = new("HarborName");
+            start = DateTime.Now;
+            end = DateTime.Now.AddMonths(1);
         }
-        private void SetupSimulation_Click(object sender, RoutedEventArgs e)
+        private void SetupPremises_Click(object sender, RoutedEventArgs e)
         {
             // Open the Setup Simulation Window
-            var setupWindow = new SetupSimulationWindow();
+            var setupWindow = new SetupSimulationWindow(harbor, start);
             setupWindow.Show();
 
         }
@@ -39,11 +47,11 @@ namespace HIOF.Hast.HARB.Gui.windows
             UpdateSimulationStatus();
             if (isSimulationRunning)
             {
-                // Start simulation logic
+                SimulationDriver.Run(harbor, start, end);
             }
             else
             {
-                // Stop simulation logic
+                // Stop simulation logic TODO Do we have a way of stopping the simulation?
                 runSimulationButton.Content = "Run Simulation";
             }
 
@@ -77,7 +85,7 @@ namespace HIOF.Hast.HARB.Gui.windows
         private void ViewSummary_Click(object sender, RoutedEventArgs e)
         {
             // Open the Simulation Summary Window
-            var summaryWindow = new SummaryWindow();
+            var summaryWindow = new SummaryWindow(this.harbor);
             summaryWindow.Show();
         }
     }

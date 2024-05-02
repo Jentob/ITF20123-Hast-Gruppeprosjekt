@@ -8,4 +8,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HIOF.Hast.HARB\HIOF.Hast.HARB.Framework\HIOF.Hast.HARB.Framework.csproj" />
+  </ItemGroup>
+
 </Project>
